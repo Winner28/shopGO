@@ -1,10 +1,13 @@
 package handlers
 
-import "net/http"
-import "service"
+import (
+	"model"
+	"net/http"
+	"service"
+)
 
 func (app *App) GetUser(w http.ResponseWriter, r *http.Request) {
-	service.GetUser(w, r)
+	service.GetUser(w, r, model.User{})
 }
 
 func (app *App) CreateUser(w http.ResponseWriter, r *http.Request) {
