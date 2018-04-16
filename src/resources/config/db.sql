@@ -18,7 +18,7 @@ CREATE TABLE products
 CREATE TABLE categories
 (
 	id INT NOT NULL,
-	type varchar(255)
+	name varchar(255)
 );
 
 CREATE TABLE product_categories 
