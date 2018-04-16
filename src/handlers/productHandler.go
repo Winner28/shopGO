@@ -1,24 +1,27 @@
 package handlers
 
-import "net/http"
-import "service"
+import (
+	"model"
+	"net/http"
+	"service"
+)
 
 func (app *App) GetProduct(w http.ResponseWriter, r *http.Request) {
-	service.GetProduct(w, r)
+	service.Get(w, r, model.Product{})
 }
 
 func (app *App) CreateProduct(w http.ResponseWriter, r *http.Request) {
-	service.CreateProduct(w, r)
+	service.Create(w, r, model.Product{})
 }
 
 func (app *App) DeleteProduct(w http.ResponseWriter, r *http.Request) {
-	service.DeleteProduct(w, r)
+	service.Delete(w, r, model.Product{})
 }
 
 func (app *App) UpdateProduct(w http.ResponseWriter, r *http.Request) {
-	service.UpdateProduct(w, r)
+	service.Update(w, r, model.Product{})
 }
 
 func (app *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
-	service.GetAllProducts(w, r)
+	service.GetAll(w, r, model.Product{})
 }

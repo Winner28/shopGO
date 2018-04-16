@@ -7,7 +7,7 @@ CREATE TABLE users
   email varchar(255), 
 );
 
-CREATE TABLE product 
+CREATE TABLE products
 (
 	id INT SERIAL PRIMARY KEY,
 	name varchar(255),
@@ -15,13 +15,13 @@ CREATE TABLE product
 	description varchar(255)
 );
 
-CREATE TABLE category
+CREATE TABLE categories
 (
 	id INT NOT NULL,
 	type varchar(255)
 );
 
-CREATE TABLE product_category 
+CREATE TABLE product_categories 
 (
 	id INT SERIAL PRIMARY KEY NOT NULL ,
 	product_id INT NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE product_orders
 	ON DELETE CASCADE
 );
 
-CREATE TABLE role
+CREATE TABLE roles
 (
 	id INT PRIMARY KEY,
 	user_id INT,

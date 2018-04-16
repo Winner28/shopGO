@@ -7,21 +7,21 @@ import (
 )
 
 func (app *App) GetUser(w http.ResponseWriter, r *http.Request) {
-	service.GetUser(w, r, model.User{})
+	service.Get(w, r, model.User{})
 }
 
 func (app *App) CreateUser(w http.ResponseWriter, r *http.Request) {
-	service.CreateUser(w, r)
+	service.Create(w, r, model.User{})
 }
 
 func (app *App) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	service.DeleteUser(w, r)
+	service.Delete(w, r, model.User{})
 }
 
 func (app *App) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	service.UpdateUser(w, r)
+	service.Update(w, r, model.User{})
 }
 
 func (app *App) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	service.GetAllUsers(w, r)
+	service.GetAll(w, r, model.User{})
 }

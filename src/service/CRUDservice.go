@@ -12,22 +12,25 @@ import (
 
 func Create(w http.ResponseWriter, r *http.Request, value interface{}) {
 	params := mux.Vars(r)
-	ID := params["id"]
+	ID, _ := strconv.Atoi(params["id"])
+
+	var valueType interface{}
 
 	if user, ok := value.(model.User); ok {
-
+		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+			response.RespondError(w, http.StatusMethodNotAllowed, err.Error())
+		}
+		valueType = user
 	} else if product, ok := value.(model.Product); ok {
-
+		if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
+			response.RespondError(w, http.StatusMethodNotAllowed, err.Error())
+		}
+		valueType = product
 	} else {
 		// ...
 	}
 
-	valueT.ID, _ = strconv.Atoi(ID)
-	if err := json.NewDecoder(r.Body).Decode(&valueT); err != nil {
-		response.RespondError(w, http.StatusMethodNotAllowed, err.Error())
-	}
-
-	value, err := repository.Create(valueT)
+	value, err := repository.Create(ID, valueType)
 	if err != nil {
 		response.RespondError(w, http.StatusNotFound, err.Error())
 		return
@@ -38,12 +41,12 @@ func Create(w http.ResponseWriter, r *http.Request, value interface{}) {
 func Get(w http.ResponseWriter, r *http.Request, value interface{}) {
 	params := mux.Vars(r)
 	ID := params["id"]
-	user, err := repository.Get(ID, value)
+	value, err := repository.Get(ID, value)
 	if err != nil {
 		response.RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	response.RespondJSON(w, http.StatusOK, user)
+	response.RespondJSON(w, http.StatusOK, value)
 }
 
 func Delete(w http.ResponseWriter, r *http.Request, value interface{}) {
@@ -52,17 +55,17 @@ func Delete(w http.ResponseWriter, r *http.Request, value interface{}) {
 	if err := repository.Delete(ID, value); err != nil {
 		response.RespondError(w, http.StatusNotFound, err.Error())
 	}
-	response.RespondJSON(w, http.StatusOK, "User deleted")
+	response.RespondJSON(w, http.StatusOK, "Value Deleted")
 }
 
 func Update(w http.ResponseWriter, r *http.Request, value interface{}) {
-	response.RespondJSON(w, http.StatusOK, "User deleted")
+	response.RespondJSON(w, http.StatusOK, "Value Deleted")
 }
 
 func GetAll(w http.ResponseWriter, r *http.Request, value interface{}) {
-	var users []model.User
-	if err := getConnection().DB.Find(&users).Error; err != nil {
+	values, err := repository.FindAll(value)
+	if err != nil {
 		response.RespondError(w, http.StatusInternalServerError, "Server error")
 	}
-	response.RespondJSON(w, http.StatusOK, users)
+	response.RespondJSON(w, http.StatusOK, values)
 }
