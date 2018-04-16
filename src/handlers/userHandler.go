@@ -18,3 +18,7 @@ func (app *App) DeleteUser(w http.ResponseWriter, r *http.Request) {
 func (app *App) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	service.UpdateUser(w, r)
 }
+
+func (app *App) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	service.GetAllUsers(w, r)
+}

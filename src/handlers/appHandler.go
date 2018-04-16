@@ -25,5 +25,6 @@ func (app *App) setRouters() {
 	app.Router.HandleFunc("/users/{id}", app.CreateUser).Methods("POST")
 	app.Router.HandleFunc("/users/{id}", app.UpdateUser).Methods("PUT")
 	app.Router.HandleFunc("/users/{id}", app.DeleteUser).Methods("DELETE")
+	app.Router.HandleFunc("/users", app.GetAllUsers).Methods("GET")
 
 }

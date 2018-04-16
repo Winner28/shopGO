@@ -33,7 +33,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	ID := params["id"]
 	user := model.User{}
 	if err := getConnection().DB.First(&user, ID).Error; err != nil {
-		response.RespondError(w, http.StatusNotFound, err.Error())
+		response.RespondError(w, http.StatusNotFound, "User not found")
 	}
 	response.RespondJSON(w, http.StatusOK, user)
 }
@@ -50,4 +50,12 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
+}
+
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	var users []model.User
+	if err := getConnection().DB.Find(&users).Error; err != nil {
+		response.RespondError(w, http.StatusInternalServerError, "Server error")
+	}
+	response.RespondJSON(w, http.StatusOK, users)
 }
