@@ -1,9 +1,5 @@
 package service
 
-import (
-	"model"
-)
-
 type CRUDRepository interface {
 	Get(ID string, value interface{}) (interface{}, error)
 	Create(ID int, value interface{}) (interface{}, error)
@@ -14,9 +10,11 @@ type CRUDRepository interface {
 
 type CRUDOperations struct{}
 
+type UserDAO struct{}
+
 var repository CRUDRepository
 
-func init() {
+/* func init() {
 	repository = CRUDOperations{}
 }
 
@@ -108,4 +106,4 @@ func (oper CRUDOperations) FindAll(value interface{}) ([]interface{}, error) {
 	}
 
 	return nil, nil
-}
+} */
