@@ -1,4 +1,4 @@
-package dao
+package connection
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ func initialize() {
 	c.DB = db
 }
 
-func getConnection() *connection {
+func GetConnection() *connection {
 	if c == nil {
 		initialize()
 		return c

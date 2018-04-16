@@ -1,12 +1,6 @@
 package handlers
 
-import (
-	"model"
-	"net/http"
-	"service"
-)
-
-func (app *App) GetProduct(w http.ResponseWriter, r *http.Request) {
+/* func (app *App) GetProduct(w http.ResponseWriter, r *http.Request) {
 	service.Get(w, r, model.Product{})
 }
 
@@ -25,3 +19,4 @@ func (app *App) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 func (app *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	service.GetAll(w, r, model.Product{})
 }
+*/

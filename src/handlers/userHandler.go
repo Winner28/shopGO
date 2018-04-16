@@ -1,27 +1,35 @@
 package handlers
 
 import (
-	"model"
+	"dao"
 	"net/http"
 	"service"
 )
 
+var userDAO *dao.UserDAO
+var userService *service.UserService
+
+func init() {
+	userDAO = dao.GetUserDAO()
+	userService = service.GetUserService(userDAO)
+}
+
 func (app *App) GetUser(w http.ResponseWriter, r *http.Request) {
-	service.Get(w, r, model.User{})
+	userService.Get(w, r)
 }
 
 func (app *App) CreateUser(w http.ResponseWriter, r *http.Request) {
-	service.Create(w, r, model.User{})
+	userService.Create(w, r)
 }
 
 func (app *App) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	service.Delete(w, r, model.User{})
+	userService.Delete(w, r)
 }
 
 func (app *App) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	service.Update(w, r, model.User{})
+	userService.Update(w, r)
 }
 
 func (app *App) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	service.GetAll(w, r, model.User{})
+	userService.GetAll(w, r)
 }
