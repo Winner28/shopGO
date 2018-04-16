@@ -32,9 +32,9 @@ func (app *App) setUsersRouters() {
 }
 
 func (app *App) setProductRouters() {
-	/* app.Router.HandleFunc("/products/{id}", app.GetProduct).Methods("GET")
+	app.Router.HandleFunc("/products/{id}", app.GetProduct).Methods("GET")
 	app.Router.HandleFunc("/products/{id}", app.CreateProduct).Methods("POST")
 	app.Router.HandleFunc("/products/{id}", app.UpdateProduct).Methods("PUT")
 	app.Router.HandleFunc("/products/{id}", app.DeleteProduct).Methods("DELETE")
-	app.Router.HandleFunc("/products", app.GetAllProducts).Methods("GET") */
+	app.Router.HandleFunc("/products", app.GetAllProducts).Methods("GET")
 }
