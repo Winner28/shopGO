@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 )
 
 type App struct {
@@ -11,10 +12,12 @@ type App struct {
 }
 
 var app App
+var SessionStore = sessions.NewCookieStore([]byte("something-very-secret"))
 
 func Init() {
 	app.Router = mux.NewRouter()
 	app.setRouters()
+
 	http.ListenAndServe(":8080", app.Router)
 }
 
