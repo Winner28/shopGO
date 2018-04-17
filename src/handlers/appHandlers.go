@@ -22,6 +22,7 @@ func (app *App) setRouters() {
 	app.setAuthRoutes()
 	app.setUsersRoutes()
 	app.setProductRoutes()
+	app.setRoleRoutes()
 }
 
 func (app *App) setAuthRoutes() {
@@ -44,4 +45,12 @@ func (app *App) setProductRoutes() {
 	app.Router.HandleFunc("/products/{id}", app.UpdateProduct).Methods("PUT")
 	app.Router.HandleFunc("/products/{id}", app.DeleteProduct).Methods("DELETE")
 	app.Router.HandleFunc("/products", app.GetAllProducts).Methods("GET")
+}
+
+func (app *App) setRoleRoutes() {
+	app.Router.HandleFunc("/roles/{id}", app.GetUserRole).Methods("GET")
+	app.Router.HandleFunc("/roles/{id}", app.CreateRole).Methods("POST")
+	app.Router.HandleFunc("/roles/{id}", app.UpdateUserRole).Methods("PUT")
+	app.Router.HandleFunc("/roles/{id}", app.DeleteUserRole).Methods("DELETE")
+	app.Router.HandleFunc("/roles", app.GetAllRoles).Methods("GET")
 }

@@ -7,29 +7,29 @@ import (
 )
 
 var roleDAO *dao.RoleDAO
-var productService *service.ProductService
+var roleService *service.RoleService
 
 func init() {
-	productDAO = dao.GetProductDAO()
-	productService = service.GetProductService(productDAO)
+	roleDAO = dao.GetRoleDAO()
+	roleService = service.GetRoleService(roleDAO)
 }
 
-func (app *App) GetProduct(w http.ResponseWriter, r *http.Request) {
-	productService.Get(w, r)
+func (app *App) GetUserRole(w http.ResponseWriter, r *http.Request) {
+	roleService.Get(w, r)
 }
 
-func (app *App) CreateProduct(w http.ResponseWriter, r *http.Request) {
-	productService.Create(w, r)
+func (app *App) CreateRole(w http.ResponseWriter, r *http.Request) {
+	roleService.Create(w, r)
 }
 
-func (app *App) DeleteProduct(w http.ResponseWriter, r *http.Request) {
-	productService.Delete(w, r)
+func (app *App) DeleteUserRole(w http.ResponseWriter, r *http.Request) {
+	roleService.Delete(w, r)
 }
 
-func (app *App) UpdateProduct(w http.ResponseWriter, r *http.Request) {
-	productService.Update(w, r)
+func (app *App) UpdateUserRole(w http.ResponseWriter, r *http.Request) {
+	roleService.Update(w, r)
 }
 
-func (app *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
-	productService.GetAll(w, r)
+func (app *App) GetAllRoles(w http.ResponseWriter, r *http.Request) {
+	roleService.GetAll(w, r)
 }
