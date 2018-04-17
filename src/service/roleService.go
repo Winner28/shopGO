@@ -34,7 +34,7 @@ func (service *RoleService) Create(w http.ResponseWriter, r *http.Request) {
 		response.RespondError(w, http.StatusMethodNotAllowed, err.Error())
 		return
 	}
-	role.ID = userID
+	role.UserID = userID
 	role, err := service.DAO.Create(role)
 	if err != nil {
 		response.RespondError(w, http.StatusNotFound, err.Error())

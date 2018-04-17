@@ -32,7 +32,7 @@ func (dao *RoleDAO) Update(ID int, user model.Role) (model.Role, error) {
 }
 
 func (dao *RoleDAO) Delete(userID int) error {
-	if err := connection.GetConnection().DB.Where("user_id = ?", userID).Delete(model.User{}, userID).Error; err != nil {
+	if err := connection.GetConnection().DB.Where("user_id = ?", userID).Delete(model.Role{}).Error; err != nil {
 		return err
 	}
 	return nil
