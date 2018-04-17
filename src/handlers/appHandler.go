@@ -19,11 +19,18 @@ func Init() {
 }
 
 func (app *App) setRouters() {
-	app.setUsersRouters()
-	app.setProductRouters()
+	app.setAuthRoutes()
+	app.setUsersRoutes()
+	app.setProductRoutes()
 }
 
-func (app *App) setUsersRouters() {
+func (app *App) setAuthRoutes() {
+	app.Router.HandleFunc("/login", app.Login).Methods("POST")
+	app.Router.HandleFunc("/logout", app.Logout).Methods("POST")
+	app.Router.HandleFunc("/register", app.Register).Methods("POST")
+}
+
+func (app *App) setUsersRoutes() {
 	app.Router.HandleFunc("/users/{id}", app.GetUser).Methods("GET")
 	app.Router.HandleFunc("/users/{id}", app.CreateUser).Methods("POST")
 	app.Router.HandleFunc("/users/{id}", app.UpdateUser).Methods("PUT")
@@ -31,7 +38,7 @@ func (app *App) setUsersRouters() {
 	app.Router.HandleFunc("/users", app.GetAllUsers).Methods("GET")
 }
 
-func (app *App) setProductRouters() {
+func (app *App) setProductRoutes() {
 	app.Router.HandleFunc("/products/{id}", app.GetProduct).Methods("GET")
 	app.Router.HandleFunc("/products/{id}", app.CreateProduct).Methods("POST")
 	app.Router.HandleFunc("/products/{id}", app.UpdateProduct).Methods("PUT")
