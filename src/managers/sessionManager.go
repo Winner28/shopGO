@@ -41,5 +41,5 @@ func (manager *SessionManager) GetUserEmailByCookie(cookie *http.Cookie) (string
 }
 
 func (manager *SessionManager) DeleteSession(cookie *http.Cookie) {
-	delete(manager.sessions, cookie.Value)
+	manager.sessions[cookie.Value] = false
 }

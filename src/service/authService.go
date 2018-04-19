@@ -45,10 +45,14 @@ func (auth *AuthService) Login(w http.ResponseWriter, r *http.Request) {
 			managers.GetSessionManager().CreateSession(cookie)
 		}
 	} else {
+		if _, loggedIn := managers.GetSessionManager().GetUserEmailByCookie(cookie); !loggedIn {
+			log.Println("nononononon")
+			http.Redirect(w, r, "http://localhost:8080/signin", 301)
+			//TODO AUTH ON LOG
+		}
 		log.Println("you already signed in")
 		http.Redirect(w, r, "http://localhost:8080/users", 301)
 	}
-
 }
 
 func (auth *AuthService) Logout(w http.ResponseWriter, r *http.Request) {
