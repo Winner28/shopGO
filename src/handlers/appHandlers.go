@@ -6,7 +6,6 @@ import (
 	"resources"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 )
 
 type App struct {
@@ -14,7 +13,6 @@ type App struct {
 }
 
 var app App
-var SessionStore = sessions.NewCookieStore([]byte("something-very-secret"))
 var templates *resources.Templates
 
 func Init() {
@@ -35,7 +33,7 @@ func (app *App) setRouters() {
 func (app *App) setAuthRoutes() {
 	app.Router.HandleFunc("/signin", app.Login).Methods("POST")
 	app.Router.HandleFunc("/signin", app.LoginPage).Methods("GET")
-	app.Router.HandleFunc("/logout", app.Logout).Methods("POST")
+	app.Router.HandleFunc("/logout", app.Logout).Methods("GET")
 	app.Router.HandleFunc("/signup", app.Register).Methods("POST")
 }
 

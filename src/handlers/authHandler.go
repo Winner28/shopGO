@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"dao"
-	"log"
 	"net/http"
 	"resources"
 	"service"
@@ -17,10 +16,6 @@ func init() {
 }
 
 func (app *App) Login(w http.ResponseWriter, r *http.Request) {
-	session, _ := SessionStore.Get(r, "user-session")
-	session.Values["auth"] = true
-	session.Values["id"] = 1
-	session.Save(r, w)
 	authService.Login(w, r)
 }
 
@@ -31,16 +26,12 @@ func (app *App) LoginPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) Logout(w http.ResponseWriter, r *http.Request) {
-	session, _ := SessionStore.Get(r, "user-session")
-	session.Values["auth"] = false
-	session.Values["id"] = 0
-	session.Save(r, w)
 	authService.Logout(w, r)
 
 }
 
 func (app *App) Register(w http.ResponseWriter, r *http.Request) {
-	session, _ := SessionStore.Get(r, "user-session")
+	/* session, _ := SessionStore.Get(r, "user-session")
 
 	// Check if user is authenticated
 	if auth, ok := session.Values["auth"].(bool); !ok || !auth {
@@ -49,6 +40,6 @@ func (app *App) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Print secret message
-	log.Println(w, "The cake is a lie!")
+	log.Println(w, "The cake is a lie!") */
 	authService.Register(w, r)
 }
