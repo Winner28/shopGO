@@ -3,6 +3,7 @@ package handlers
 import (
 	"html/template"
 	"net/http"
+	"resources"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
@@ -13,13 +14,13 @@ type App struct {
 }
 
 var app App
-var templates map[string]*template.Template
 var SessionStore = sessions.NewCookieStore([]byte("something-very-secret"))
+var templates *resources.Templates
 
 func Init() {
 	app.Router = mux.NewRouter()
 	app.setRouters()
-	app.setTemplatesPrefix()
+	app.setTemplates()
 	http.ListenAndServe(":8080", app.Router)
 }
 
@@ -31,9 +32,10 @@ func (app *App) setRouters() {
 }
 
 func (app *App) setAuthRoutes() {
-	app.Router.HandleFunc("/login", app.Login).Methods("POST")
+	app.Router.HandleFunc("/signin", app.Login).Methods("POST")
+	app.Router.HandleFunc("/signin", app.LoginPage).Methods("GET")
 	app.Router.HandleFunc("/logout", app.Logout).Methods("POST")
-	app.Router.HandleFunc("/register", app.Register).Methods("POST")
+	app.Router.HandleFunc("/signup", app.Register).Methods("POST")
 }
 
 func (app *App) setUsersRoutes() {
@@ -60,6 +62,8 @@ func (app *App) setRoleRoutes() {
 	app.Router.HandleFunc("/roles", app.GetAllRoles).Methods("GET")
 }
 
-func (app *App) setTemplatesPrefix() {
-	app.Router.PathPrefix("/public/").Handler(http.StripPrefix("/frontend/public/", http.FileServer(http.Dir("frontend/public/"))))
+func (app *App) setTemplates() {
+	templates = resources.GetTemplatesContainer()
+	templates.AddTemplate("signin", template.Must(template.ParseFiles("frontend/templates/signin.html")))
+	app.Router.PathPrefix("/frontend/public/").Handler(http.StripPrefix("/frontend/public/", http.FileServer(http.Dir("./frontend/public/"))))
 }

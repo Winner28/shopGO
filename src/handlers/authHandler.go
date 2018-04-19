@@ -4,6 +4,7 @@ import (
 	"dao"
 	"log"
 	"net/http"
+	"resources"
 	"service"
 )
 
@@ -21,6 +22,12 @@ func (app *App) Login(w http.ResponseWriter, r *http.Request) {
 	session.Values["id"] = 1
 	session.Save(r, w)
 	authService.Login(w, r)
+}
+
+func (app *App) LoginPage(w http.ResponseWriter, r *http.Request) {
+	if err := resources.GetTemplatesContainer().GetTemplate("signin").Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (app *App) Logout(w http.ResponseWriter, r *http.Request) {

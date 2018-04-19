@@ -13,7 +13,7 @@ func init() {
 	templates.templates = make(map[string]*template.Template)
 }
 
-func getTemplatesContainer() *Templates {
+func GetTemplatesContainer() *Templates {
 	return templates
 }
 
