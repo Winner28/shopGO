@@ -29,6 +29,7 @@ func (app *App) setRouters() {
 	app.setUsersRoutes()
 	app.setProductRoutes()
 	app.setRoleRoutes()
+	app.setCustomRoutes()
 }
 
 func (app *App) setAuthRoutes() {
@@ -62,8 +63,11 @@ func (app *App) setRoleRoutes() {
 	app.Router.HandleFunc("/roles", app.GetAllRoles).Methods("GET")
 }
 
+func (app *App) setCustomRoutes() {
+}
+
 func (app *App) setTemplates() {
 	templates = resources.GetTemplatesContainer()
-	templates.AddTemplate("signin", template.Must(template.ParseFiles("frontend/templates/signin.html")))
-	app.Router.PathPrefix("/frontend/public/").Handler(http.StripPrefix("/frontend/public/", http.FileServer(http.Dir("./frontend/public/"))))
+	templates.AddTemplate("signin", template.Must(template.ParseFiles("templates/signin.html")))
+	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 }
