@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"html/template"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -12,12 +13,13 @@ type App struct {
 }
 
 var app App
+var templates map[string]*template.Template
 var SessionStore = sessions.NewCookieStore([]byte("something-very-secret"))
 
 func Init() {
 	app.Router = mux.NewRouter()
+	app.setTemplates()
 	app.setRouters()
-
 	http.ListenAndServe(":8080", app.Router)
 }
 
@@ -56,4 +58,10 @@ func (app *App) setRoleRoutes() {
 	app.Router.HandleFunc("/roles/{id}", app.UpdateUserRole).Methods("PUT")
 	app.Router.HandleFunc("/roles/{id}", app.DeleteUserRole).Methods("DELETE")
 	app.Router.HandleFunc("/roles", app.GetAllRoles).Methods("GET")
+}
+
+func (app *App) setTemplates() {
+	app.Router.PathPrefix("/public/").Handler(http.StripPrefix("/frontend/public/", http.FileServer(http.Dir("frontend/public/"))))
+	templates["signin"] = template.Must(template.ParseFiles("templates/account/signin.html"))
+
 }
