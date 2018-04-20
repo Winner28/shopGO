@@ -35,8 +35,9 @@ func (app *App) setRouters() {
 func (app *App) setAuthRoutes() {
 	app.Router.HandleFunc("/signin", app.Login).Methods("POST")
 	app.Router.HandleFunc("/signin", app.LoginPage).Methods("GET")
-	app.Router.HandleFunc("/out", app.Logout).Methods("GET")
-	app.Router.HandleFunc("/signup", app.Register).Methods("POST")
+	app.Router.HandleFunc("/out", app.Logout).Methods("POST")
+	app.Router.HandleFunc("/signup", app.SignUp).Methods("POST")
+	app.Router.HandleFunc("/signup", app.SignUpPage).Methods("GET")
 }
 
 func (app *App) setUsersRoutes() {
@@ -74,5 +75,6 @@ func (app *App) setCustomRoutes() {
 func (app *App) setTemplates() {
 	templates = resources.GetTemplatesContainer()
 	templates.AddTemplate("signin", template.Must(template.ParseFiles("templates/signin.html")))
+	templates.AddTemplate("signup", template.Must(template.ParseFiles("templates/signup.html")))
 	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 }

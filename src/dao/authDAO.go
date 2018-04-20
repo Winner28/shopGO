@@ -4,10 +4,11 @@ import "model"
 
 type AuthDAO struct {
 	userDAO *UserDAO
+	roleDAO *RoleDAO
 }
 
 func GetAuthDAO() *AuthDAO {
-	return &AuthDAO{GetUserDAO()}
+	return &AuthDAO{GetUserDAO(), GetRoleDAO()}
 }
 
 func (auth *AuthDAO) Login(email, passwordHash string) (bool, string) {
@@ -22,8 +23,12 @@ func (auth *AuthDAO) Login(email, passwordHash string) (bool, string) {
 	return true, "You logged in!"
 }
 
-func (auth *AuthDAO) Register(model.User) (bool, error) {
-	return false, nil
+func (auth *AuthDAO) Register(user model.User) (bool, string) {
+	if _, err := auth.userDAO.Create(user); err != nil {
+		return false, err.Error()
+	}
+
+	return true, "Successfully signed up!"
 }
 
 func (auth *AuthDAO) checkUserCredo(user model.User, email, passwordHash string) bool {

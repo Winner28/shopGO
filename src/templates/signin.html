@@ -1,27 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <link href="../assets/account/signin.css" rel="stylesheet">
-    <title>Sign in</title>
-
-</head>
-<body>
-<div class="container">
-	<div id="tag">
-	<h1> Sign in </h1>
-	</div>
-  <form action="/signin" method="POST" >
-    <label for="fname">Email</label>
-    <input type="text" id="email" name="email" placeholder="Your Email">
-
-    <label for="lname">Password</label>
-    <input type="password" id="password" name="password" placeholder="Your Password">
-
-    <div id="ska">
-    <input type="submit" value="Sign in">
-</div>
-</form>
-     
-
-</div>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link href="../assets/account/signup.css" rel="stylesheet">
+        <title>Sign in</title>
+        <script>
+            const button = document.querySelector('.btn')
+            const form   = document.querySelector('.form')
+                
+                button.addEventListener('click', function() {
+                   form.classList.add('form--no') 
+                });
+        </script>
+    </head>
+    <body>
+    
+    
+    
+    
+    <div class="user" >
+        <header class="user__header">
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3219/logo.svg" alt="" />
+            <h1 class="user__title">Sign in</h1>
+        </header>
+        
+        <form class="form" action="/signin" method="POST">
+            
+            <div class="form__group">
+                <input type="email" name="email" placeholder="Email" class="form__input" />
+            </div>
+            
+            <div class="form__group">
+                <input type="password" name="password" placeholder="Password" class="form__input" />
+            </div>
+            
+            <button class="btn" type="submit">Sign in</button>
+        </form>
+    </div>
+    </body>
+    
+    </html>
