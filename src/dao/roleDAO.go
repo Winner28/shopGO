@@ -27,6 +27,17 @@ func (dao *RoleDAO) Create(role model.Role) (model.Role, error) {
 
 }
 
+func (dao *RoleDAO) createDefaultRole(userID int) bool {
+	var role model.Role
+	role.UserID = userID
+	role.Name = "user"
+	if err := connection.GetConnection().DB.Create(&role).Error; err != nil {
+		return false
+	}
+
+	return true
+}
+
 func (dao *RoleDAO) Update(ID int, user model.Role) (model.Role, error) {
 	return emptyRole(), nil
 }
