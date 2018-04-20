@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"log"
 	"model"
 	"net/http"
 	"response"
@@ -28,6 +29,11 @@ func GetUserService(dao userDAO) *UserService {
 }
 
 func (service *UserService) Create(w http.ResponseWriter, r *http.Request) {
+	if access := getSecureService().checkIfAdmin(r); !access {
+		log.Println("common user")
+		response.RespondError(w, http.StatusBadRequest, "Access denied!")
+		return
+	}
 	params := mux.Vars(r)
 	ID, _ := strconv.Atoi(params["id"])
 	var user model.User
@@ -45,6 +51,11 @@ func (service *UserService) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (service *UserService) Get(w http.ResponseWriter, r *http.Request) {
+	if access := getSecureService().checkIfAdmin(r); !access {
+		log.Println("common user")
+		response.RespondError(w, http.StatusBadRequest, "Access denied!")
+		return
+	}
 	params := mux.Vars(r)
 	ID, _ := strconv.Atoi(params["id"])
 	user, err := service.DAO.Get(ID)
@@ -56,6 +67,11 @@ func (service *UserService) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (service *UserService) Delete(w http.ResponseWriter, r *http.Request) {
+	if access := getSecureService().checkIfAdmin(r); !access {
+		log.Println("common user")
+		response.RespondError(w, http.StatusBadRequest, "Access denied!")
+		return
+	}
 	params := mux.Vars(r)
 	ID, _ := strconv.Atoi(params["id"])
 	if err := service.DAO.Delete(ID); err != nil {
@@ -69,6 +85,11 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (service *UserService) GetAll(w http.ResponseWriter, r *http.Request) {
+	if access := getSecureService().checkIfAdmin(r); !access {
+		log.Println("common user")
+		response.RespondError(w, http.StatusBadRequest, "Access denied!")
+		return
+	}
 	users, err := service.DAO.FindAll()
 	if err != nil {
 		response.RespondError(w, http.StatusInternalServerError, "Server error")
