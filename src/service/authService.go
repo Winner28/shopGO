@@ -26,10 +26,14 @@ func (auth *AuthService) Login(w http.ResponseWriter, r *http.Request) {
 	log.Println("Login method")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
+	if !validateUserSignInInput(email, password) {
+		log.Println("Bad user input!")
+		http.Redirect(w, r, "http://localhost:8080/signin", 301)
+		return
+	}
 	success, message := auth.DAO.Login(email, password)
 	if !success {
 		http.Error(w, message, http.StatusForbidden)
-
 	} else {
 		auth.createSession(w, email)
 		http.Redirect(w, r, "http://localhost:8080/", 301)
@@ -52,12 +56,19 @@ func (auth *AuthService) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (auth *AuthService) Register(w http.ResponseWriter, r *http.Request) {
-	success, msg := auth.DAO.Register(auth.parseUserFromRequest(r))
-	if !success {
-		log.Println("smth wents wrong...", msg)
+	user := auth.parseUserFromRequest(r)
+	if !validateUserSignUpInput(user) {
+		log.Println("bad user input...")
+		http.Redirect(w, r, "http://localhost:8080/signup", 301)
 		return
 	}
-
+	success, msg := auth.DAO.Register(user)
+	if !success {
+		log.Println("smth wents wrong...", msg)
+	} else {
+		log.Println(msg)
+		auth.createSession(w, user.Email)
+	}
 }
 
 func (auth *AuthService) parseUserFromRequest(r *http.Request) model.User {
@@ -81,4 +92,13 @@ func (auth *AuthService) createSession(w http.ResponseWriter, cookieValue string
 	http.SetCookie(w, cookie)
 	managers.GetSessionManager().CreateSession(cookie)
 	log.Println("Cookie is created, session is created")
+}
+
+func validateUserSignUpInput(user model.User) bool {
+	return !(user.FirstName == "" || user.LastName == "" ||
+		user.Email == "" || user.PasswordHash == "")
+}
+
+func validateUserSignInInput(email, password string) bool {
+	return !(email == "" || password == "")
 }
