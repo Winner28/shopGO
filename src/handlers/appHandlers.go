@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"fmt"
 	"html/template"
+	"log"
 	"managers"
 	"net/http"
 	"resources"
@@ -67,8 +67,11 @@ func (app *App) setRoleRoutes() {
 func (app *App) setCustomRoutes() {
 	app.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		cookie, _ := r.Cookie(COOKIE_NAME)
-		v1, v2 := managers.GetSessionManager().GetUserEmailByCookie(cookie)
-		fmt.Fprint(w, "Home page", v1, v2)
+		log.Println(cookie)
+		if !managers.GetSessionManager().CheckIfUserLoggedIn(cookie) {
+			log.Println("redirected!")
+			http.Redirect(w, r, "http://localhost:8080/signin", 301)
+		}
 	}).Methods("GET")
 }
 
@@ -76,5 +79,6 @@ func (app *App) setTemplates() {
 	templates = resources.GetTemplatesContainer()
 	templates.AddTemplate("signin", template.Must(template.ParseFiles("templates/signin.html")))
 	templates.AddTemplate("signup", template.Must(template.ParseFiles("templates/signup.html")))
+	templates.AddTemplate("error", template.Must(template.ParseFiles("templates/errors/error.html")))
 	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 }

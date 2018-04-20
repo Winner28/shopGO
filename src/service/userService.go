@@ -2,9 +2,9 @@ package service
 
 import (
 	"encoding/json"
-	"log"
 	"model"
 	"net/http"
+	"resources"
 	"response"
 	"strconv"
 
@@ -30,9 +30,12 @@ func GetUserService(dao userDAO) *UserService {
 
 func (service *UserService) Create(w http.ResponseWriter, r *http.Request) {
 	if access := getSecureService().checkIfAdmin(r); !access {
-		log.Println("common user")
-		response.RespondError(w, http.StatusBadRequest, "Access denied!")
-		return
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			return
+		}
 	}
 	params := mux.Vars(r)
 	ID, _ := strconv.Atoi(params["id"])
@@ -52,9 +55,12 @@ func (service *UserService) Create(w http.ResponseWriter, r *http.Request) {
 
 func (service *UserService) Get(w http.ResponseWriter, r *http.Request) {
 	if access := getSecureService().checkIfAdmin(r); !access {
-		log.Println("common user")
-		response.RespondError(w, http.StatusBadRequest, "Access denied!")
-		return
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			return
+		}
 	}
 	params := mux.Vars(r)
 	ID, _ := strconv.Atoi(params["id"])
@@ -68,9 +74,12 @@ func (service *UserService) Get(w http.ResponseWriter, r *http.Request) {
 
 func (service *UserService) Delete(w http.ResponseWriter, r *http.Request) {
 	if access := getSecureService().checkIfAdmin(r); !access {
-		log.Println("common user")
-		response.RespondError(w, http.StatusBadRequest, "Access denied!")
-		return
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			return
+		}
 	}
 	params := mux.Vars(r)
 	ID, _ := strconv.Atoi(params["id"])
@@ -86,9 +95,12 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 
 func (service *UserService) GetAll(w http.ResponseWriter, r *http.Request) {
 	if access := getSecureService().checkIfAdmin(r); !access {
-		log.Println("common user")
-		response.RespondError(w, http.StatusBadRequest, "Access denied!")
-		return
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			return
+		}
 	}
 	users, err := service.DAO.FindAll()
 	if err != nil {
