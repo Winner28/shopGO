@@ -11,9 +11,9 @@ func GetAuthDAO() *AuthDAO {
 }
 
 func (auth *AuthDAO) Login(email, passwordHash string) (bool, string) {
-	user, err := auth.userDAO.Get(1)
+	user, err := auth.userDAO.GetUserByEmail(email)
 	if err != nil {
-		return false, "Got error"
+		return false, "User not exists"
 	}
 	if !auth.checkUserCredo(user, email, passwordHash) {
 		return false, "Bad user email or password"

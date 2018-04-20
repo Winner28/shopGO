@@ -12,6 +12,7 @@ import (
 
 type userDAO interface {
 	Get(ID int) (model.User, error)
+	GetUserByEmail(email string) (model.User, error)
 	Create(user model.User) (model.User, error)
 	Update(ID int, user model.User) (model.User, error)
 	Delete(ID int) error

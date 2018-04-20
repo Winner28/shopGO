@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	"html/template"
+	"managers"
 	"net/http"
 	"resources"
 
@@ -33,7 +35,7 @@ func (app *App) setRouters() {
 func (app *App) setAuthRoutes() {
 	app.Router.HandleFunc("/signin", app.Login).Methods("POST")
 	app.Router.HandleFunc("/signin", app.LoginPage).Methods("GET")
-	app.Router.HandleFunc("/logout", app.Logout).Methods("GET")
+	app.Router.HandleFunc("/out", app.Logout).Methods("GET")
 	app.Router.HandleFunc("/signup", app.Register).Methods("POST")
 }
 
@@ -62,6 +64,11 @@ func (app *App) setRoleRoutes() {
 }
 
 func (app *App) setCustomRoutes() {
+	app.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		cookie, _ := r.Cookie(COOKIE_NAME)
+		v1, v2 := managers.GetSessionManager().GetUserEmailByCookie(cookie)
+		fmt.Fprint(w, "Home page", v1, v2)
+	}).Methods("GET")
 }
 
 func (app *App) setTemplates() {
