@@ -35,7 +35,7 @@ body {
     margin-left: auto;
     margin-right: auto;
   width: 800px;
-  border-bottom: 3px solid whitesmoke;
+  border-bottom: 3px solid rgb(48, 45, 45);
   font-family: Raleway, sans-serif;
   line-height: 1;
 }

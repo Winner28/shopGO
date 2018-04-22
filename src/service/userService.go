@@ -94,7 +94,7 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (service *UserService) GetAll(w http.ResponseWriter, r *http.Request) {
-	if access := getSecureService().checkIfAdmin(r); !access {
+	if access := getSecureService().checkIfAdmin(r); access {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
