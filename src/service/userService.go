@@ -106,5 +106,8 @@ func (service *UserService) GetAll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response.RespondError(w, http.StatusInternalServerError, "Server error")
 	}
-	response.RespondJSON(w, http.StatusOK, users)
+	if err := resources.GetTemplatesContainer().GetTemplate("getAllUsers").Execute(w, users); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
