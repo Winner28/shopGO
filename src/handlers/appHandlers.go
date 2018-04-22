@@ -25,6 +25,7 @@ func Init() {
 
 func (app *App) setRouters() {
 	app.setAuthRoutes()
+	app.setMainRoutes()
 	app.setUsersRoutes()
 	app.setProductRoutes()
 	app.setRoleRoutes()
@@ -77,5 +78,23 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("signin", template.Must(template.ParseFiles("templates/auth/signin.html")))
 	templates.AddTemplate("signup", template.Must(template.ParseFiles("templates/auth/signup.html")))
 	templates.AddTemplate("error", template.Must(template.ParseFiles("templates/errors/error.html")))
+	templates.AddTemplate("main", template.Must(template.ParseFiles("templates/main.html")))
+	templates.AddTemplate("shop", template.Must(template.ParseFiles("templates/shop.html")))
 	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
+}
+
+func (app *App) setMainRoutes() {
+	app.Router.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
+		if err := resources.GetTemplatesContainer().GetTemplate("main").Execute(w, nil); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}).Methods("GET")
+
+	app.Router.HandleFunc("/shop", func(w http.ResponseWriter, r *http.Request) {
+		if err := resources.GetTemplatesContainer().GetTemplate("shop").Execute(w, nil); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}).Methods("GET")
 }

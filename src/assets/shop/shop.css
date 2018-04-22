@@ -1,0 +1,87 @@
+#sidebar {
+    background: white;
+    width: 200px;
+    height: 100%;
+    display: block;
+    position: absolute;
+    margin-top: 30px;
+    left: -200px;
+    transition: left 0.3s linear;
+}
+
+#sidebar ul {
+    margin: 0px;
+    padding: 0px;
+    font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 60px;
+
+}
+
+#sidebar ul li {
+    list-style:none;
+    font-weight: 60px;
+    margin:0 0 30px 0;
+}
+
+#sidebar ul li a:hover {
+    background: #2580a2 url("images/hover.gif") left center no-repeat;
+  color: #fff;
+  padding-bottom: 8px;
+  font-weight: 60px;
+
+}
+
+#sidebar ul li a {
+    
+  border-bottom: 1px solid #393939;
+  color: black;
+  display: block;
+  margin: 0;
+  padding: 8px 12px;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+#sidebar.visible {
+    left:0px;
+    transition: left 0.3s linear;
+
+}
+
+#sidebar-btn {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 15px;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: -60px;
+}
+
+#sidebar-btn span {
+    height: 1px;
+    background: #111;
+    margin-bottom: 5px;
+    display: block;
+    
+}
+
+#sidebar-btn span:nth-child(2) {
+    width: 75%;
+    
+}
+
+#sidebar-btn span:nth-child(3) {
+    width: 50%;
+    
+}
+
+#sidebar_content {
+    margin-top: 50px;
+    margin-left: 30px;
+    width: 100px;
+}
