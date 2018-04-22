@@ -42,17 +42,7 @@ func (auth *AuthService) Login(w http.ResponseWriter, r *http.Request) {
 
 func (auth *AuthService) Logout(w http.ResponseWriter, r *http.Request) {
 	log.Println("Logout method")
-	if cookie, _ := r.Cookie(COOKIE_NAME); cookie != nil {
-		if loggedIN := managers.GetSessionManager().CheckIfUserLoggedIn(cookie); loggedIN {
-			log.Println("logouted")
-			managers.GetSessionManager().InvalidateSession(cookie)
-			//http.Redirect(w, r, "http://localhost:8080/home", http.StatusFound)
-		} else {
-			log.Println("You need to login first")
-			//http.Redirect(w, r, "http://localhost:8080/login", http.StatusFound)
-		}
-		return
-	}
+	managers.GetSessionManager().ClearSession(w)
 }
 
 func (auth *AuthService) Register(w http.ResponseWriter, r *http.Request) {
@@ -85,12 +75,7 @@ func (auth *AuthService) parseUserFromRequest(r *http.Request) model.User {
 }
 
 func (auth *AuthService) createSession(w http.ResponseWriter, cookieValue string) {
-	cookie := &http.Cookie{
-		Name:  COOKIE_NAME,
-		Value: cookieValue,
-	}
-	http.SetCookie(w, cookie)
-	managers.GetSessionManager().CreateSession(cookie)
+	managers.GetSessionManager().SetSession(cookieValue, w)
 	log.Println("Cookie is created, session is created")
 }
 

@@ -32,8 +32,11 @@ func getSecureService() SecureService {
 }
 
 func (secure *Secure) checkIfAdmin(r *http.Request) bool {
-	if cookie, _ := r.Cookie(COOKIE_NAME); cookie != nil {
-		email, _ := managers.GetSessionManager().GetUserEmailByCookie(cookie)
+
+	if !managers.GetSessionManager().UserLoggedIn(r) {
+		return false
+	} else {
+		email := managers.GetSessionManager().GetUserEmail(r)
 		role := secure.checkUserRole(email)
 		if role == ROLE_ADMIN {
 			return true
@@ -41,11 +44,20 @@ func (secure *Secure) checkIfAdmin(r *http.Request) bool {
 			return false
 		}
 	}
-	return false
 }
 
 func (secure *Secure) checkIfUser(r *http.Request) bool {
-	return false
+	if !managers.GetSessionManager().UserLoggedIn(r) {
+		return false
+	} else {
+		email := managers.GetSessionManager().GetUserEmail(r)
+		role := secure.checkUserRole(email)
+		if role == ROLE_USER {
+			return true
+		} else {
+			return false
+		}
+	}
 }
 
 func (secure *Secure) checkUserRole(email string) string {

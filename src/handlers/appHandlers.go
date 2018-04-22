@@ -35,10 +35,10 @@ func (app *App) setRouters() {
 
 func (app *App) setAuthRoutes() {
 	app.Router.HandleFunc("/signin", app.Login).Methods("POST")
-	app.Router.HandleFunc("/inn", app.LoginPage).Methods("GET")
-	app.Router.HandleFunc("/logout", app.Logout).Methods("GET")
+	app.Router.HandleFunc("/sign", app.LoginPage).Methods("GET")
+	app.Router.HandleFunc("/outs", app.Logout).Methods("GET")
 	app.Router.HandleFunc("/signup", app.SignUp).Methods("POST")
-	app.Router.HandleFunc("/signup", app.SignUpPage).Methods("GET")
+	app.Router.HandleFunc("/register", app.SignUpPage).Methods("GET")
 }
 
 func (app *App) setUsersRoutes() {
