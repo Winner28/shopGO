@@ -30,12 +30,13 @@ func (app *App) setRouters() {
 	app.setProductRoutes()
 	app.setRoleRoutes()
 	app.setNotFoundHanlder()
+	app.setProfileRoutes()
 }
 
 func (app *App) setAuthRoutes() {
 	app.Router.HandleFunc("/signin", app.Login).Methods("POST")
-	app.Router.HandleFunc("/signin", app.LoginPage).Methods("GET")
-	app.Router.HandleFunc("/out", app.Logout).Methods("POST")
+	app.Router.HandleFunc("/login", app.LoginPage).Methods("GET")
+	app.Router.HandleFunc("/logout", app.Logout).Methods("GET")
 	app.Router.HandleFunc("/signup", app.SignUp).Methods("POST")
 	app.Router.HandleFunc("/signup", app.SignUpPage).Methods("GET")
 }
@@ -73,6 +74,10 @@ func (app *App) setNotFoundHanlder() {
 	})
 }
 
+func (app *App) setProfileRoutes() {
+	app.Router.HandleFunc("/profile", app.GetProfile).Methods("GET")
+}
+
 func (app *App) setTemplates() {
 	templates = resources.GetTemplatesContainer()
 	templates.AddTemplate("signin", template.Must(template.ParseFiles("templates/auth/signin.html")))
@@ -80,6 +85,8 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("error", template.Must(template.ParseFiles("templates/errors/error.html")))
 	templates.AddTemplate("main", template.Must(template.ParseFiles("templates/main.html")))
 	templates.AddTemplate("shop", template.Must(template.ParseFiles("templates/shop.html")))
+	templates.AddTemplate("profile", template.Must(template.ParseFiles("templates/profile.html")))
+
 	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 }
 
@@ -97,4 +104,5 @@ func (app *App) setMainRoutes() {
 			return
 		}
 	}).Methods("GET")
+
 }

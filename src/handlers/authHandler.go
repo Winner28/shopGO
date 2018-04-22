@@ -28,7 +28,7 @@ func (app *App) LoginPage(w http.ResponseWriter, r *http.Request) {
 	if cookie, _ := r.Cookie(COOKIE_NAME); cookie != nil {
 		if managers.GetSessionManager().CheckIfUserLoggedIn(cookie) {
 			log.Println("User already logged in")
-			http.Redirect(w, r, "http://localhost:8080/", 301)
+			http.Redirect(w, r, "http://localhost:8080/profile", 301)
 			return
 		}
 	}

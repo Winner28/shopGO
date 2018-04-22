@@ -1,0 +1,77 @@
+<html> 
+  <head> 
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+     <link href="../assets/shop/shop.css" rel="stylesheet">
+     <link rel="import" href="file://home/devladey/Programming/goUniversityProject/src/templates/main.html">
+     <script> 
+            $(function(){
+              $("#includedContent").load("http://localhost:8080/home"); 
+            });
+            </script> 
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  </head> 
+
+  <body> 
+
+        <div id="includedContent"></div>
+
+
+       
+
+<div class="container" style="margin-top:100px;">
+    <div class="span3 well">
+        <center>
+        <a href="#aboutModal" data-toggle="modal" data-target="#myModal"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxDVrknSeZ5ob-z2Ew0QJFgE14TT1MoUb6pLGHg0MI6nxaDq84" name="aboutme" width="140" height="140" class="img-circle"></a>
+        <h3>{{.FirstName}} {{.LastName}}</h3>
+        <em>Click on Avatar for more information</em>
+		</center>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <center><h4 class="modal-title" id="myModalLabel">More About {{ .FirstName}}</h4></center>
+                    </div>
+                <div class="modal-body">
+                    <center>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxDVrknSeZ5ob-z2Ew0QJFgE14TT1MoUb6pLGHg0MI6nxaDq84" name="aboutme" width="140" height="140" border="0" class="img-circle"></a>
+                    <h3 class="media-heading">{{.FirstName}}</h3>
+                    <br>
+                    <span><strong>Information: </strong></span>
+                    <br>
+                    
+                        <span><strong>Firstname: </strong> {{.FirstName}}</span>
+                        <br>
+                        
+                        <span><strong>Lastname: </strong>{{.LastName}}</span>
+                        <br>
+                        <span><strong>Email: </strong>{{.Email}}</span>
+                        <br>
+                        
+                    </center>
+                    <hr>
+                   
+                    <p class="text-center"><strong>Bio: </strong><br>
+                        Common user. LOrem ipsum user lorem common user la ipsum</p>
+                    <br>
+                
+                </div>
+                <div class="modal-footer">
+                    <center>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ </body>
+
+</html>

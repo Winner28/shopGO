@@ -36,7 +36,7 @@ func (auth *AuthService) Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, message, http.StatusForbidden)
 	} else {
 		auth.createSession(w, email)
-		http.Redirect(w, r, "http://localhost:8080/", 301)
+		http.Redirect(w, r, "http://localhost:8080/profile", 301)
 	}
 }
 
@@ -46,10 +46,10 @@ func (auth *AuthService) Logout(w http.ResponseWriter, r *http.Request) {
 		if loggedIN := managers.GetSessionManager().CheckIfUserLoggedIn(cookie); loggedIN {
 			log.Println("logouted")
 			managers.GetSessionManager().InvalidateSession(cookie)
-			//http.Redirect(w, r, "http://localhost:8080/", 301)
+			http.Redirect(w, r, "http://localhost:8080/home", 301)
 		} else {
 			log.Println("You need to login first")
-			//http.Redirect(w, r, "http://localhost:8080/signin", 301)
+			http.Redirect(w, r, "http://localhost:8080/login", 301)
 		}
 		return
 	}
