@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"log"
 	"model"
 	"net/http"
 	"resources"
@@ -94,7 +95,8 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (service *UserService) GetAll(w http.ResponseWriter, r *http.Request) {
-	if access := getSecureService().checkIfAdmin(r); access {
+	log.Println("Get all Users method")
+	if access := getSecureService().checkIfAdmin(r); !access {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
