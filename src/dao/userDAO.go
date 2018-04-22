@@ -55,6 +55,7 @@ func (dao *UserDAO) GetUserByEmail(email string) (model.User, error) {
 	return user, nil
 }
 
+
 func emptyUser() model.User {
 	return model.User{}
 }

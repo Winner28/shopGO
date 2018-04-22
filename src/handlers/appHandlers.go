@@ -2,8 +2,7 @@ package handlers
 
 import (
 	"html/template"
-	"log"
-	"managers"
+	"model"
 	"net/http"
 	"resources"
 
@@ -29,7 +28,7 @@ func (app *App) setRouters() {
 	app.setUsersRoutes()
 	app.setProductRoutes()
 	app.setRoleRoutes()
-	app.setCustomRoutes()
+	app.setNotFoundHanlder()
 }
 
 func (app *App) setAuthRoutes() {
@@ -64,15 +63,13 @@ func (app *App) setRoleRoutes() {
 	app.Router.HandleFunc("/roles", app.GetAllRoles).Methods("GET")
 }
 
-func (app *App) setCustomRoutes() {
-	app.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		cookie, _ := r.Cookie(COOKIE_NAME)
-		log.Println(cookie)
-		if !managers.GetSessionManager().CheckIfUserLoggedIn(cookie) {
-			log.Println("redirected!")
-			http.Redirect(w, r, "http://localhost:8080/signin", 301)
+func (app *App) setNotFoundHanlder() {
+	app.Router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetNotFoundError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-	}).Methods("GET")
+	})
 }
 
 func (app *App) setTemplates() {

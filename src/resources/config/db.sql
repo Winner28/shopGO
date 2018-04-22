@@ -17,7 +17,7 @@ CREATE TABLE products
 
 CREATE TABLE categories
 (
-	id INT NOT NULL,
+	id SERIAL NOT NULL,
 	name varchar(255)
 );
 
@@ -28,7 +28,7 @@ CREATE TABLE product_categories
 	category_id INT NOT NULL,
 	CONSTRAINT product_category_product_id_fk FOREIGN KEY(product_id) REFERENCES product (id)
 	ON DELETE CASCADE
-	CONSTRAINT product_category_category_id_fk FOREIGN KEY(category_id) REFERENCES category (id)
+	CONSTRAINT product_category_category_id_fk FOREIGN KEY(category_id) REFERENCES categories (id)
 	ON DELETE CASCADE
 );
 
@@ -44,7 +44,7 @@ CREATE TABLE orders
 
 CREATE TABLE product_orders 
 (
-	id INT NOT NULL,
+	id SERIAL(!!!) NOT NULL,
 	order_id INT NOT NULL, 
 	product_id INT NOT NULL, 
 	CONSTRAINT product_orders_order_id_fk FOREIGN KEY(order_id) REFERENCES orders (id)
@@ -55,7 +55,7 @@ CREATE TABLE product_orders
 
 CREATE TABLE roles
 (
-	id INT PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	user_id INT,
 	name varchar(20),
 	CONSTRAINT role_user_id_fk FOREIGN KEY(user_id) REFERENCES users (id)
