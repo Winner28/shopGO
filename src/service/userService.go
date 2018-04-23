@@ -70,7 +70,10 @@ func (service *UserService) Get(w http.ResponseWriter, r *http.Request) {
 		response.RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	response.RespondJSON(w, http.StatusOK, user)
+	if err := resources.GetTemplatesContainer().GetTemplate("profile").Execute(w, user); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (service *UserService) Delete(w http.ResponseWriter, r *http.Request) {
@@ -87,7 +90,11 @@ func (service *UserService) Delete(w http.ResponseWriter, r *http.Request) {
 	if err := service.DAO.Delete(ID); err != nil {
 		response.RespondError(w, http.StatusNotFound, err.Error())
 	}
-	response.RespondJSON(w, http.StatusOK, "User Successfully Deleted")
+
+	if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.UserSuccessfullyDeleted()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {

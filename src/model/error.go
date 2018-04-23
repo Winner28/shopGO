@@ -26,3 +26,12 @@ func GetNotFoundError() Error {
 func NotAuthorizedError() Error {
 	return Error{http.StatusForbidden, "To visit this page you need to login first"}
 }
+
+type Message struct {
+	Header  string
+	Message string
+}
+
+func UserSuccessfullyDeleted() Message {
+	return Message{"Deleted", "User successfully deleted."}
+}

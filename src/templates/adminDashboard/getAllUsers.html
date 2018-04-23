@@ -32,8 +32,9 @@
                      <tr>
                        <th><span>Firstname</span></th>
                        <th><span>Lastname</span></th>
-                       <th><span>Email</span></th>
-                       <th><span>Delete User</span></th>
+                       <th><span>Profile</span></th>
+                       <th><span>Update</span></th>
+                       <th><span>Delete</span></th>
                      </tr>
                    </thead>
                    <tbody>
@@ -42,8 +43,20 @@
                      <tr>
                        <td class="lalign">{{$value.FirstName}}</td>
                        <td class="lalign">{{$value.LastName}}</td>
-                       <td class="lalign">{{$value.Email}}</td>
-                       <td class="lalign"><a href="http://localhost:8080/users/{{$value.ID}}">Get User</a></td>
+                       <td class="lalign">
+                          <form action=/users/{{$value.ID}} method="GET" if-none-match=”*”>
+                            <button class="btn" type="submit">Profile</button>
+                          </form></td>
+                        </td>
+                          <td class="lalign">
+                              <form action=/users/update method="GET" if-none-match=”*”>
+                                <button class="btn" type="submit">Update</button>
+                              </form></td>
+                            </td>
+                       <td class="lalign">
+                          <form action=/users/delete/{{$value.ID}} method="POST" if-none-match=”*”>
+                            <button class="btn" type="submit">Delete</button>
+                          </form></td>
                      </tr>
 
                          {{end}}

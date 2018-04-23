@@ -37,6 +37,9 @@ func (dao *ProductDAO) Delete(ID int) error {
 	if err := connection.GetConnection().DB.Delete(model.Product{}, ID).Error; err != nil {
 		return err
 	}
+	if err := GetProductCategoryDAO().DeleteProductCategory(ID); err != nil {
+		return err
+	}
 	return nil
 
 }

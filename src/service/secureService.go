@@ -31,6 +31,10 @@ func getSecureService() SecureService {
 	return secureService
 }
 
+func GetSecureService() SecureService {
+	return secureService
+}
+
 func (secure *Secure) checkIfAdmin(r *http.Request) bool {
 
 	if !managers.GetSessionManager().UserLoggedIn(r) {

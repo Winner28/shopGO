@@ -45,7 +45,8 @@ func (app *App) setUsersRoutes() {
 	app.Router.HandleFunc("/users/{id}", app.GetUser).Methods("GET")
 	app.Router.HandleFunc("/users/{id}", app.CreateUser).Methods("POST")
 	app.Router.HandleFunc("/users/{id}", app.UpdateUser).Methods("PUT")
-	app.Router.HandleFunc("/users/{id}", app.DeleteUser).Methods("DELETE")
+	app.Router.HandleFunc("/users/update/{id}", app.UpdateUser).Methods("PUT")
+	app.Router.HandleFunc("/users/delete/{id}", app.DeleteUser).Methods("POST")
 	app.Router.HandleFunc("/users", app.GetAllUsers).Methods("GET")
 }
 
@@ -85,14 +86,19 @@ func (app *App) setTemplates() {
 	templates = resources.GetTemplatesContainer()
 	templates.AddTemplate("signin", template.Must(template.ParseFiles("templates/auth/signin.html")))
 	templates.AddTemplate("signup", template.Must(template.ParseFiles("templates/auth/signup.html")))
+
 	templates.AddTemplate("error", template.Must(template.ParseFiles("templates/errors/error.html")))
 	templates.AddTemplate("main", template.Must(template.ParseFiles("templates/main.html")))
 	templates.AddTemplate("shop", template.Must(template.ParseFiles("templates/shop.html")))
+
 	templates.AddTemplate("profile", template.Must(template.ParseFiles("templates/profile.html")))
 	templates.AddTemplate("getAllUsers", template.Must(template.ParseFiles("templates/adminDashboard/getAllUsers.html")))
+	templates.AddTemplate("message", template.Must(template.ParseFiles("templates/adminDashboard/message.html")))
+
 	templates.AddTemplate("allProducts", template.Must(template.ParseFiles("templates/products/allProducts.html")))
 	templates.AddTemplate("buyProduct", template.Must(template.ParseFiles("templates/products/buyProduct.html")))
 	templates.AddTemplate("productCategory", template.Must(template.ParseFiles("templates/products/productCategory.html")))
+
 	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 }
 

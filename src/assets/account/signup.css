@@ -1,4 +1,4 @@
-$font-family:   "Roboto";
+ $font-family:   "Roboto";
 $font-size:     14px;
 
 $color-primary: #ABA194;
@@ -128,4 +128,4 @@ body {
     100% {
         background-position: 0 0
     }
-}
+} 
