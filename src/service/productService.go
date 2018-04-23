@@ -127,7 +127,8 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 func (service *ProductService) GetClothesProducts(w http.ResponseWriter, r *http.Request) {
 	log.Println("Getting clothes products")
 	if products, err := service.DAO.GetClothesProducts(); err == nil {
-		if err := resources.GetTemplatesContainer().GetTemplate("clothesProducts").Execute(w, products); err != nil {
+		products[0].Category = "Clothes"
+		if err := resources.GetTemplatesContainer().GetTemplate("productCategory").Execute(w, products); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -142,7 +143,8 @@ func (service *ProductService) GetClothesProducts(w http.ResponseWriter, r *http
 func (service *ProductService) GetTechsProducts(w http.ResponseWriter, r *http.Request) {
 	log.Println("Getting techs clothes")
 	if products, err := service.DAO.GetTechsProducts(); err == nil {
-		if err := resources.GetTemplatesContainer().GetTemplate("techsProducts").Execute(w, products); err != nil {
+		products[0].Category = "Technologies"
+		if err := resources.GetTemplatesContainer().GetTemplate("productCategory").Execute(w, products); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

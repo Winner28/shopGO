@@ -2,6 +2,7 @@ package dao
 
 import (
 	"connection"
+	"log"
 	"model"
 )
 
@@ -31,6 +32,8 @@ func (dao *ProductCategoryDAOImpl) GetProductsByCategoryID(ID int) ([]model.Prod
 
 		return nil, err
 	}
+
+	log.Println(products)
 
 	return products, nil
 }

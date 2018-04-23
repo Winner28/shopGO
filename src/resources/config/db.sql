@@ -23,7 +23,7 @@ CREATE TABLE categories
 
 CREATE TABLE product_categories 
 (
-	id INT SERIAL PRIMARY KEY NOT NULL ,
+	id INT SERIAL PRIMARY KEY NOT NULL , (serial now???)
 	product_id INT NOT NULL,
 	category_id INT NOT NULL,
 	CONSTRAINT product_category_product_id_fk FOREIGN KEY(product_id) REFERENCES product (id)
@@ -45,7 +45,7 @@ CREATE TABLE orders
 CREATE TABLE product_orders 
 (
 	id SERIAL(!!!) NOT NULL,
-	order_id INT NOT NULL, 
+	order_id INT NOT NULL, 	
 	product_id INT NOT NULL, 
 	CONSTRAINT product_orders_order_id_fk FOREIGN KEY(order_id) REFERENCES orders (id)
 	ON DELETE CASCADE
