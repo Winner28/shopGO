@@ -22,3 +22,7 @@ func GetInternalServerErrorError() Error {
 func GetNotFoundError() Error {
 	return Error{http.StatusNotFound, "Not found"}
 }
+
+func NotAuthorizedError() Error {
+	return Error{http.StatusForbidden, "To visit this page you need to login first"}
+}

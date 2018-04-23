@@ -2,8 +2,10 @@ package service
 
 import (
 	"encoding/json"
+	"managers"
 	"model"
 	"net/http"
+	"resources"
 	"response"
 	"strconv"
 
@@ -27,20 +29,26 @@ func GetProductService(dao productDAO) *ProductService {
 }
 
 func (service *ProductService) Create(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	ID, _ := strconv.Atoi(params["id"])
-	var product model.Product
-	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
-		response.RespondError(w, http.StatusMethodNotAllowed, err.Error())
-		return
+	if managers.GetSessionManager().UserLoggedIn(r) && secureService.checkIfAdmin(r) {
+		params := mux.Vars(r)
+		ID, _ := strconv.Atoi(params["id"])
+		var product model.Product
+		if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
+			response.RespondError(w, http.StatusMethodNotAllowed, err.Error())
+			return
+		}
+		product.ID = ID
+		product, err := service.DAO.Create(product)
+		if err != nil {
+			response.RespondError(w, http.StatusNotFound, err.Error())
+			return
+		}
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
-	product.ID = ID
-	product, err := service.DAO.Create(product)
-	if err != nil {
-		response.RespondError(w, http.StatusNotFound, err.Error())
-		return
-	}
-	response.RespondJSON(w, http.StatusCreated, product)
 }
 
 func (service *ProductService) Get(w http.ResponseWriter, r *http.Request) {
@@ -51,16 +59,26 @@ func (service *ProductService) Get(w http.ResponseWriter, r *http.Request) {
 		response.RespondError(w, http.StatusNotFound, err.Error())
 		return
 	}
+
 	response.RespondJSON(w, http.StatusOK, product)
+
 }
 
 func (service *ProductService) Delete(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	ID, _ := strconv.Atoi(params["id"])
-	if err := service.DAO.Delete(ID); err != nil {
-		response.RespondError(w, http.StatusNotFound, err.Error())
+	if managers.GetSessionManager().UserLoggedIn(r) && secureService.checkIfAdmin(r) {
+
+		params := mux.Vars(r)
+		ID, _ := strconv.Atoi(params["id"])
+		if err := service.DAO.Delete(ID); err != nil {
+			response.RespondError(w, http.StatusNotFound, err.Error())
+		}
+		response.RespondJSON(w, http.StatusOK, "Product Successfully Deleted")
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
-	response.RespondJSON(w, http.StatusOK, "Product Successfully Deleted")
 }
 
 func (service *ProductService) Update(w http.ResponseWriter, r *http.Request) {
@@ -72,5 +90,20 @@ func (service *ProductService) GetAll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response.RespondError(w, http.StatusInternalServerError, "Server error")
 	}
-	response.RespondJSON(w, http.StatusOK, products)
+	if err := resources.GetTemplatesContainer().GetTemplate("allProducts").Execute(w, products); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request) {
+	if managers.GetSessionManager().UserLoggedIn(r) && secureService.checkIfUser(r) {
+		//Execute template BUYPRODUCT and insert product[id] in that template
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.NotAuthorizedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+	}
 }

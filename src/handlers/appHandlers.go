@@ -87,7 +87,7 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("shop", template.Must(template.ParseFiles("templates/shop.html")))
 	templates.AddTemplate("profile", template.Must(template.ParseFiles("templates/profile.html")))
 	templates.AddTemplate("getAllUsers", template.Must(template.ParseFiles("templates/adminDashboard/getAllUsers.html")))
-
+	templates.AddTemplate("allProducts", template.Must(template.ParseFiles("templates/products/allProducts.html")))
 	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 }
 
