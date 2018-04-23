@@ -33,3 +33,7 @@ func (app *App) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 func (app *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
 	productService.GetAll(w, r)
 }
+
+func (app *App) BuyProduct(w http.ResponseWriter, r *http.Request) {
+	productService.BuyProduct(w, r)
+}

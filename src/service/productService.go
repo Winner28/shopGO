@@ -97,8 +97,22 @@ func (service *ProductService) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request) {
-	if managers.GetSessionManager().UserLoggedIn(r) && secureService.checkIfUser(r) {
+	if managers.GetSessionManager().UserLoggedIn(r) {
 		//Execute template BUYPRODUCT and insert product[id] in that template
+		params := mux.Vars(r)
+		ID, _ := strconv.Atoi(params["id"])
+		product, err := service.DAO.Get(ID)
+		if err != nil {
+			if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetInternalServerErrorError()); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		} else {
+			if err := resources.GetTemplatesContainer().GetTemplate("buyProduct").Execute(w, product); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
 	} else {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.NotAuthorizedError()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
