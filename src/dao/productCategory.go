@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"connection"
 	"model"
 )
 
@@ -21,9 +22,19 @@ func (dao *ProductCategoryDAOImpl) GetProductCategory() (model.ProductCategory, 
 }
 
 func (dao *ProductCategoryDAOImpl) GetProductsByCategoryID(ID int) ([]model.Product, error) {
-	return nil, nil
+	var products []model.Product
+	if err := connection.GetConnection().DB.
+		Table("products").Select("products.id, products.name, products.price,  products.description").
+		Joins("inner join product_categories on products.id = product_categories.product_id").
+		Where("product_categories.category_id = ?", ID).
+		Scan(&products).Error; err != nil {
+
+		return nil, err
+	}
+
+	return products, nil
 }
 
 func (dao *ProductCategoryDAOImpl) DeleteProductCategory(ProductID int) {
-
+	panic("Not implemented")
 }

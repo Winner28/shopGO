@@ -16,7 +16,7 @@ func GetAccessDeniedError() Error {
 }
 
 func GetInternalServerErrorError() Error {
-	return Error{http.StatusInternalServerError, "Internal server error"}
+	return Error{http.StatusInternalServerError, "Internal server error."}
 }
 
 func GetNotFoundError() Error {

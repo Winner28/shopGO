@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"log"
 	"managers"
 	"model"
 	"net/http"
@@ -18,6 +19,8 @@ type productDAO interface {
 	Update(ID int, product model.Product) (model.Product, error)
 	Delete(ID int) error
 	FindAll() ([]model.Product, error)
+	GetClothesProducts() ([]model.Product, error)
+	GetTechsProducts() ([]model.Product, error)
 }
 
 type ProductService struct {
@@ -98,7 +101,6 @@ func (service *ProductService) GetAll(w http.ResponseWriter, r *http.Request) {
 
 func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) {
-		//Execute template BUYPRODUCT and insert product[id] in that template
 		params := mux.Vars(r)
 		ID, _ := strconv.Atoi(params["id"])
 		product, err := service.DAO.Get(ID)
@@ -119,5 +121,35 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 			return
 		}
 
+	}
+}
+
+func (service *ProductService) GetClothesProducts(w http.ResponseWriter, r *http.Request) {
+	log.Println("Getting clothes products")
+	if products, err := service.DAO.GetClothesProducts(); err == nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("clothesProducts").Execute(w, products); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetInternalServerErrorError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
+func (service *ProductService) GetTechsProducts(w http.ResponseWriter, r *http.Request) {
+	log.Println("Getting techs clothes")
+	if products, err := service.DAO.GetTechsProducts(); err == nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("techsProducts").Execute(w, products); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetInternalServerErrorError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 }

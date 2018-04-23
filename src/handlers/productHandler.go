@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"dao"
+	"log"
 	"net/http"
 	"service"
 )
@@ -36,4 +37,13 @@ func (app *App) GetAllProducts(w http.ResponseWriter, r *http.Request) {
 
 func (app *App) BuyProduct(w http.ResponseWriter, r *http.Request) {
 	productService.BuyProduct(w, r)
+}
+
+func (app *App) GetClothesProducts(w http.ResponseWriter, r *http.Request) {
+	log.Println("clothes")
+	productService.GetClothesProducts(w, r)
+}
+
+func (app *App) GetTechsProducts(w http.ResponseWriter, r *http.Request) {
+	productService.GetTechsProducts(w, r)
 }

@@ -55,6 +55,8 @@ func (app *App) setProductRoutes() {
 	app.Router.HandleFunc("/products/{id}", app.UpdateProduct).Methods("PUT")
 	app.Router.HandleFunc("/products/{id}", app.DeleteProduct).Methods("DELETE")
 	app.Router.HandleFunc("/products", app.GetAllProducts).Methods("GET")
+	app.Router.HandleFunc("/product/category/clothes", app.GetClothesProducts).Methods("GET")
+	app.Router.HandleFunc("/products/category/techs", app.GetTechsProducts).Methods("GET")
 	app.Router.HandleFunc("/products/buy/{id}", app.BuyProduct).Methods("GET")
 }
 
@@ -90,8 +92,11 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("getAllUsers", template.Must(template.ParseFiles("templates/adminDashboard/getAllUsers.html")))
 	templates.AddTemplate("allProducts", template.Must(template.ParseFiles("templates/products/allProducts.html")))
 	templates.AddTemplate("buyProduct", template.Must(template.ParseFiles("templates/products/buyProduct.html")))
+	templates.AddTemplate("clothesProducts", template.Must(template.ParseFiles("templates/products/clothesProducts.html")))
+	templates.AddTemplate("techsProducts", template.Must(template.ParseFiles("templates/products/techsProducts.html")))
 	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 }
+
 func (app *App) setMainRoutes() {
 	app.Router.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
 		if err := resources.GetTemplatesContainer().GetTemplate("main").Execute(w, nil); err != nil {
