@@ -5,10 +5,12 @@ import (
 	"model"
 )
 
-type UserDAO struct{}
+type UserDAO struct {
+	roleDAO *RoleDAO
+}
 
 func GetUserDAO() *UserDAO {
-	return &UserDAO{}
+	return &UserDAO{GetRoleDAO()}
 }
 
 func (dao *UserDAO) Get(ID int) (model.User, error) {
@@ -27,9 +29,12 @@ func (dao *UserDAO) Create(user model.User) (model.User, error) {
 
 }
 
-func (dao *UserDAO) Update(user model.User) (model.User, error) {
+func (dao *UserDAO) Update(user model.User, role model.Role) (model.User, error) {
 	user = dao.compareAndReturnUserToUpdate(user)
 	if err := connection.GetConnection().DB.Save(&user).Error; err != nil {
+		return emptyUser(), err
+	}
+	if _, err := dao.roleDAO.Update(role); err != nil {
 		return emptyUser(), err
 	}
 	return user, nil

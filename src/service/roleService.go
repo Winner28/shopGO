@@ -13,7 +13,7 @@ import (
 type roleDAO interface {
 	Get(ID int) (model.Role, error)
 	Create(role model.Role) (model.Role, error)
-	Update(ID int, role model.Role) (model.Role, error)
+	Update(role model.Role) (model.Role, error)
 	Delete(ID int) error
 	FindAll() ([]model.Role, error)
 }

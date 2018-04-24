@@ -38,7 +38,7 @@ func (dao *RoleDAO) createDefaultRole(userID int) bool {
 	return true
 }
 
-func (dao *RoleDAO) Update(ID int, user model.Role) (model.Role, error) {
+func (dao *RoleDAO) Update(user model.Role) (model.Role, error) {
 	return emptyRole(), nil
 }
 

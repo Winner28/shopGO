@@ -16,7 +16,7 @@ type userDAO interface {
 	Get(ID int) (model.User, error)
 	GetUserByEmail(email string) (model.User, error)
 	Create(user model.User) (model.User, error)
-	Update(user model.User) (model.User, error)
+	Update(user model.User, role model.Role) (model.User, error)
 	Delete(ID int) error
 	FindAll() ([]model.User, error)
 }
@@ -109,33 +109,40 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 	}
 	params := mux.Vars(r)
 	ID, _ := strconv.Atoi(params["id"])
-	user := service.getUserFromRequest(r)
+	user, role := service.getUserAndRoleFromRequest(r)
 	user.ID = ID
-	user, err := service.DAO.Update(user)
+	role.UserID = ID
+	user, err := service.DAO.Update(user, role)
 	if err != nil {
 		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileUpdatingUser()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	} else {
-		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.UserSuccessfullyUpdated(user)); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		return
 	}
+
+	if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.UserSuccessfullyUpdated(user)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 }
 
-func (service *UserService) getUserFromRequest(r *http.Request) model.User {
+func (service *UserService) getUserAndRoleFromRequest(r *http.Request) (model.User, model.Role) {
 	firstName := r.FormValue("firstname")
 	lastName := r.FormValue("lastname")
-	email := r.FormValue("email")
 	password := r.FormValue("password")
+	email := r.FormValue("email")
+	role := r.FormValue("role")
 	return model.User{
-		FirstName:    firstName,
-		LastName:     lastName,
-		Email:        email,
-		PasswordHash: password,
-	}
+			FirstName:    firstName,
+			LastName:     lastName,
+			Email:        email,
+			PasswordHash: password,
+		},
+		model.Role{
+			Name: role,
+		}
 
 }
 
