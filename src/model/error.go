@@ -44,3 +44,7 @@ func ErrorWhileUpdatingUser() Message {
 	return Message{"System problems", "We got error when trying to update user"}
 
 }
+
+func UserSuccessfullyUpdated(user User) Message {
+	return Message{"Successfully updated", "User with EMAIL: " + user.Email + " updated"}
+}

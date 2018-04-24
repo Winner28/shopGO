@@ -27,7 +27,8 @@ func (dao *UserDAO) Create(user model.User) (model.User, error) {
 
 }
 
-func (dao *UserDAO) Update(ID int, user model.User) (model.User, error) {
+func (dao *UserDAO) Update(user model.User) (model.User, error) {
+	user = dao.compareAndReturnUserToUpdate(user)
 	return model.User{}, nil
 }
 
@@ -57,4 +58,21 @@ func (dao *UserDAO) GetUserByEmail(email string) (model.User, error) {
 
 func emptyUser() model.User {
 	return model.User{}
+}
+
+func (dao *UserDAO) compareAndReturnUserToUpdate(user model.User) model.User {
+	oldUser, _ := dao.Get(user.ID)
+	if user.FirstName == "" {
+		user.FirstName = oldUser.FirstName
+	}
+	if user.LastName == "" {
+		user.LastName = oldUser.LastName
+	}
+	if user.Email == "" {
+		user.Email = oldUser.Email
+	}
+	if user.PasswordHash == "" {
+		user.PasswordHash = oldUser.PasswordHash
+	}
+	return user
 }

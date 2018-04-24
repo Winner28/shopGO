@@ -117,6 +117,11 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.UserSuccessfullyUpdated(user)); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
