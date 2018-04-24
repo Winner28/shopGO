@@ -1,7 +1,6 @@
 package service
 
 import (
-	"encoding/json"
 	"log"
 	"model"
 	"net/http"
@@ -15,7 +14,7 @@ import (
 type userDAO interface {
 	Get(ID int) (model.User, error)
 	GetUserByEmail(email string) (model.User, error)
-	Create(user model.User) (model.User, error)
+	Create(user model.User, role model.Role) (model.User, error)
 	Update(user model.User, role model.Role) (model.User, error)
 	Delete(ID int) error
 	FindAll() ([]model.User, error)
@@ -38,20 +37,21 @@ func (service *UserService) Create(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	params := mux.Vars(r)
-	ID, _ := strconv.Atoi(params["id"])
-	var user model.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		response.RespondError(w, http.StatusMethodNotAllowed, err.Error())
-		return
-	}
-	user.ID = ID
-	user, err := service.DAO.Create(user)
+	user, role := service.getUserAndRoleFromRequest(r)
+	user, err := service.DAO.Create(user, role)
 	if err != nil {
-		response.RespondError(w, http.StatusNotFound, err.Error())
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileCreatingUser(err.Error())); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 		return
 	}
-	response.RespondJSON(w, http.StatusCreated, user)
+
+	if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.UserSuccessfullyCreated(user)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 }
 
 func (service *UserService) Get(w http.ResponseWriter, r *http.Request) {

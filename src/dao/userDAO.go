@@ -21,8 +21,12 @@ func (dao *UserDAO) Get(ID int) (model.User, error) {
 	return user, nil
 }
 
-func (dao *UserDAO) Create(user model.User) (model.User, error) {
+func (dao *UserDAO) Create(user model.User, role model.Role) (model.User, error) {
 	if err := connection.GetConnection().DB.Create(&user).Error; err != nil {
+		return emptyUser(), err
+	}
+	role.UserID = user.ID
+	if _, err := dao.roleDAO.Create(role); err != nil {
 		return emptyUser(), err
 	}
 	return user, nil

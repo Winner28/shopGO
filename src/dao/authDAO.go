@@ -24,7 +24,7 @@ func (auth *AuthDAO) Login(email, passwordHash string) (bool, string) {
 }
 
 func (auth *AuthDAO) Register(user model.User) (bool, string) {
-	if _, err := auth.userDAO.Create(user); err != nil {
+	if _, err := auth.userDAO.Create(user, getDefaultRole()); err != nil {
 		return false, err.Error()
 	}
 	userID := auth.getUserID(user)
@@ -43,4 +43,10 @@ func (auth *AuthDAO) checkUserCredo(user model.User, email, passwordHash string)
 func (auth *AuthDAO) getUserID(user model.User) int {
 	user, _ = auth.userDAO.GetUserByEmail(user.Email)
 	return user.ID
+}
+
+func getDefaultRole() model.Role {
+	return model.Role{
+		Name: "user",
+	}
 }

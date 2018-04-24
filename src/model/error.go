@@ -42,9 +42,17 @@ func WeDontHaveSuchUser() Message {
 
 func ErrorWhileUpdatingUser(message string) Message {
 	return Message{"System problems", message}
+}
+
+func ErrorWhileCreatingUser(message string) Message {
+	return Message{"System problems", message}
 
 }
 
 func UserSuccessfullyUpdated(user User) Message {
 	return Message{"Successfully updated", "User with EMAIL: " + user.Email + " updated"}
+}
+
+func UserSuccessfullyCreated(user User) Message {
+	return Message{"Successfully created", "User with EMAIL: " + user.Email + " created"}
 }

@@ -49,7 +49,7 @@ func (app *App) setAuthRoutes() {
 
 func (app *App) setUsersRoutes() {
 	app.Router.HandleFunc("/users/{id}", app.GetUser).Methods("GET")
-	app.Router.HandleFunc("/users/{id}", app.CreateUser).Methods("POST")
+	app.Router.HandleFunc("/users", app.CreateUser).Methods("POST")
 	app.Router.HandleFunc("/users/{id}", app.UpdateUser).Methods("PUT")
 	app.Router.HandleFunc("/users/update/{id}", app.UpdateUser).Methods("POST")
 	app.Router.HandleFunc("/users/delete/{id}", app.DeleteUser).Methods("POST")
@@ -100,6 +100,7 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("getAllUsers", template.Must(template.ParseFiles("templates/adminDashboard/getAllUsers.html")))
 	templates.AddTemplate("message", template.Must(template.ParseFiles("templates/adminDashboard/message.html")))
 	templates.AddTemplate("updateUser", template.Must(template.ParseFiles("templates/adminDashboard/updateUser.html")))
+	templates.AddTemplate("createUser", template.Must(template.ParseFiles("templates/adminDashboard/createUser.html")))
 
 	templates.AddTemplate("allProducts", template.Must(template.ParseFiles("templates/products/allProducts.html")))
 	templates.AddTemplate("buyProduct", template.Must(template.ParseFiles("templates/products/buyProduct.html")))
@@ -109,7 +110,7 @@ func (app *App) setTemplates() {
 }
 
 func (app *App) setMainRoutes() {
-	app.Router.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
+	app.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if err := resources.GetTemplatesContainer().GetTemplate("main").Execute(w, nil); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
