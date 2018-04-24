@@ -29,7 +29,10 @@ func (dao *UserDAO) Create(user model.User) (model.User, error) {
 
 func (dao *UserDAO) Update(user model.User) (model.User, error) {
 	user = dao.compareAndReturnUserToUpdate(user)
-	return model.User{}, nil
+	if err := connection.GetConnection().DB.Save(&user).Error; err != nil {
+		return emptyUser(), err
+	}
+	return user, nil
 }
 
 func (dao *UserDAO) Delete(ID int) error {

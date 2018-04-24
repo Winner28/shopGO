@@ -111,7 +111,7 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 	ID, _ := strconv.Atoi(params["id"])
 	user := service.getUserFromRequest(r)
 	user.ID = ID
-	_, err := service.DAO.Update(user)
+	user, err := service.DAO.Update(user)
 	if err != nil {
 		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileUpdatingUser()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -140,7 +140,7 @@ func (service *UserService) getUserFromRequest(r *http.Request) model.User {
 }
 
 func (service *UserService) UpdateForm(w http.ResponseWriter, r *http.Request) {
-	if access := getSecureService().checkIfAdmin(r); access {
+	if access := getSecureService().checkIfAdmin(r); !access {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
