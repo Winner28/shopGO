@@ -22,6 +22,9 @@ func (dao *RoleDAO) Get(userID int) (model.Role, error) {
 }
 
 func (dao *RoleDAO) Create(role model.Role) (model.Role, error) {
+	if !checkIfRoleExists(role.Name) {
+		return emptyRole(), errors.New("Bad role input")
+	}
 	if err := connection.GetConnection().DB.Create(&role).Error; err != nil {
 		return emptyRole(), err
 	}

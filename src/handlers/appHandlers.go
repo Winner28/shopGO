@@ -36,6 +36,7 @@ func (app *App) setRouters() {
 
 func (app *App) setAdminDashRoutes() {
 	app.Router.HandleFunc("/users/update/{id}", app.UpdateUserForm).Methods("GET")
+	app.Router.HandleFunc("/user/create", app.CreateUserForm).Methods("GET")
 	app.Router.HandleFunc("/users", app.GetAllUsers).Methods("GET")
 }
 
@@ -110,7 +111,7 @@ func (app *App) setTemplates() {
 }
 
 func (app *App) setMainRoutes() {
-	app.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	app.Router.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
 		if err := resources.GetTemplatesContainer().GetTemplate("main").Execute(w, nil); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

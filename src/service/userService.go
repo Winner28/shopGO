@@ -171,6 +171,21 @@ func (service *UserService) UpdateForm(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (service *UserService) CreateForm(w http.ResponseWriter, r *http.Request) {
+	if access := getSecureService().checkIfAdmin(r); !access {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		return
+	}
+	log.Println("Create user template!")
+	if err := resources.GetTemplatesContainer().GetTemplate("createUser").Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func (service *UserService) GetAll(w http.ResponseWriter, r *http.Request) {
 	log.Println("Get all Users method")
 	if access := getSecureService().checkIfAdmin(r); !access {
