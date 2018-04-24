@@ -35,3 +35,12 @@ type Message struct {
 func UserSuccessfullyDeleted() Message {
 	return Message{"Deleted", "User successfully deleted."}
 }
+
+func WeDontHaveSuchUser() Message {
+	return Message{"Look like you got lost", "We dont have such User in our system"}
+}
+
+func ErrorWhileUpdatingUser() Message {
+	return Message{"System problems", "We got error when trying to update user"}
+
+}

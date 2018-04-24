@@ -16,7 +16,7 @@ type userDAO interface {
 	Get(ID int) (model.User, error)
 	GetUserByEmail(email string) (model.User, error)
 	Create(user model.User) (model.User, error)
-	Update(ID int, user model.User) (model.User, error)
+	Update(user model.User) (model.User, error)
 	Delete(ID int) error
 	FindAll() ([]model.User, error)
 }
@@ -98,7 +98,65 @@ func (service *UserService) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
-	response.RespondJSON(w, http.StatusOK, "Value Updated")
+	log.Println("Update method!")
+	if access := getSecureService().checkIfAdmin(r); !access {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			return
+		}
+	}
+	params := mux.Vars(r)
+	ID, _ := strconv.Atoi(params["id"])
+	user := service.getUserFromRequest(r)
+	user.ID = ID
+	_, err := service.DAO.Update(user)
+	if err != nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileUpdatingUser()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
+func (service *UserService) getUserFromRequest(r *http.Request) model.User {
+	firstName := r.FormValue("firstname")
+	lastName := r.FormValue("lastname")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	return model.User{
+		FirstName:    firstName,
+		LastName:     lastName,
+		Email:        email,
+		PasswordHash: password,
+	}
+
+}
+
+func (service *UserService) UpdateForm(w http.ResponseWriter, r *http.Request) {
+	if access := getSecureService().checkIfAdmin(r); access {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		return
+	}
+	params := mux.Vars(r)
+	ID, _ := strconv.Atoi(params["id"])
+
+	if user, err := service.DAO.Get(ID); err == nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("updateUser").Execute(w, user); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.WeDontHaveSuchUser()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
 }
 
 func (service *UserService) GetAll(w http.ResponseWriter, r *http.Request) {
@@ -107,9 +165,9 @@ func (service *UserService) GetAll(w http.ResponseWriter, r *http.Request) {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
-		} else {
-			return
 		}
+
+		return
 	}
 	users, err := service.DAO.FindAll()
 	if err != nil {

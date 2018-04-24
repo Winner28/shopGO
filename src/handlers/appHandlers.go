@@ -31,6 +31,12 @@ func (app *App) setRouters() {
 	app.setRoleRoutes()
 	app.setNotFoundHanlder()
 	app.setProfileRoutes()
+	app.setAdminDashRoutes()
+}
+
+func (app *App) setAdminDashRoutes() {
+	app.Router.HandleFunc("/users/update/{id}", app.UpdateUserForm).Methods("GET")
+	app.Router.HandleFunc("/users", app.GetAllUsers).Methods("GET")
 }
 
 func (app *App) setAuthRoutes() {
@@ -45,9 +51,8 @@ func (app *App) setUsersRoutes() {
 	app.Router.HandleFunc("/users/{id}", app.GetUser).Methods("GET")
 	app.Router.HandleFunc("/users/{id}", app.CreateUser).Methods("POST")
 	app.Router.HandleFunc("/users/{id}", app.UpdateUser).Methods("PUT")
-	app.Router.HandleFunc("/users/update/{id}", app.UpdateUser).Methods("PUT")
+	app.Router.HandleFunc("/users/update/{id}", app.UpdateUser).Methods("POST")
 	app.Router.HandleFunc("/users/delete/{id}", app.DeleteUser).Methods("POST")
-	app.Router.HandleFunc("/users", app.GetAllUsers).Methods("GET")
 }
 
 func (app *App) setProductRoutes() {
@@ -94,6 +99,7 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("profile", template.Must(template.ParseFiles("templates/profile.html")))
 	templates.AddTemplate("getAllUsers", template.Must(template.ParseFiles("templates/adminDashboard/getAllUsers.html")))
 	templates.AddTemplate("message", template.Must(template.ParseFiles("templates/adminDashboard/message.html")))
+	templates.AddTemplate("updateUser", template.Must(template.ParseFiles("templates/adminDashboard/updateUser.html")))
 
 	templates.AddTemplate("allProducts", template.Must(template.ParseFiles("templates/products/allProducts.html")))
 	templates.AddTemplate("buyProduct", template.Must(template.ParseFiles("templates/products/buyProduct.html")))
