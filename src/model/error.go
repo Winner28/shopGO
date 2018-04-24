@@ -40,8 +40,8 @@ func WeDontHaveSuchUser() Message {
 	return Message{"Look like you got lost", "We dont have such User in our system"}
 }
 
-func ErrorWhileUpdatingUser() Message {
-	return Message{"System problems", "We got error when trying to update user"}
+func ErrorWhileUpdatingUser(message string) Message {
+	return Message{"System problems", message}
 
 }
 

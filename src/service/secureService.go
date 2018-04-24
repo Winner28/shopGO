@@ -2,6 +2,7 @@ package service
 
 import (
 	"dao"
+	"log"
 	"managers"
 	"net/http"
 )
@@ -42,6 +43,8 @@ func (secure *Secure) checkIfAdmin(r *http.Request) bool {
 	} else {
 		email := managers.GetSessionManager().GetUserEmail(r)
 		role := secure.checkUserRole(email)
+		log.Println(role + "asdasd")
+
 		if role == ROLE_ADMIN {
 			return true
 		} else {

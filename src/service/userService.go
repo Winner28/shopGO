@@ -114,7 +114,7 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 	role.UserID = ID
 	user, err := service.DAO.Update(user, role)
 	if err != nil {
-		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileUpdatingUser()); err != nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileUpdatingUser(err.Error())); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
