@@ -2,7 +2,9 @@ package dao
 
 import (
 	"connection"
+	"errors"
 	"model"
+	"strings"
 )
 
 type RoleDAO struct{}
@@ -38,8 +40,41 @@ func (dao *RoleDAO) createDefaultRole(userID int) bool {
 	return true
 }
 
-func (dao *RoleDAO) Update(user model.Role) (model.Role, error) {
-	return emptyRole(), nil
+func (dao *RoleDAO) Update(role model.Role) (model.Role, error) {
+	if err := dao.compareAndReturnRoleToUpdate(&role); err != nil {
+		return emptyRole(), errors.New("Error")
+	}
+	if err := connection.GetConnection().DB.Save(&role).Error; err != nil {
+		return emptyRole(), err
+	}
+	return role, nil
+}
+
+func (dao *RoleDAO) compareAndReturnRoleToUpdate(role *model.Role) error {
+	if !checkIfRoleExists(role.Name) {
+		return errors.New("We dont have such role in system!")
+	}
+	oldRole, err := dao.Get(role.UserID)
+	if err != nil {
+		return err
+	}
+	if role.Name == "" {
+		role.Name = oldRole.Name
+	}
+	return nil
+}
+
+func checkIfRoleExists(roleName string) bool {
+	switch strings.ToLower(roleName) {
+	case "admin":
+		return true
+	case "user":
+		return true
+	case "":
+		return true
+	default:
+		return false
+	}
 }
 
 func (dao *RoleDAO) Delete(userID int) error {
