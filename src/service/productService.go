@@ -155,3 +155,15 @@ func (service *ProductService) GetTechsProducts(w http.ResponseWriter, r *http.R
 		}
 	}
 }
+
+func (service *ProductService) UpdateForm(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (service *ProductService) CreateForm(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (service *ProductService) ProductsBoard(w http.ResponseWriter, r *http.Request) {
+
+}

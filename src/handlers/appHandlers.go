@@ -35,9 +35,17 @@ func (app *App) setRouters() {
 }
 
 func (app *App) setAdminDashRoutes() {
-	app.Router.HandleFunc("/users/update/{id}", app.UpdateUserForm).Methods("GET")
-	app.Router.HandleFunc("/user/create", app.CreateUserForm).Methods("GET")
-	app.Router.HandleFunc("/users", app.GetAllUsers).Methods("GET")
+
+	// Related to USERS DashBoard
+	app.Router.HandleFunc("/admin/users/update/{id}", app.UpdateUserForm).Methods("GET")
+	app.Router.HandleFunc("/admin/user/create", app.CreateUserForm).Methods("GET")
+	app.Router.HandleFunc("/admin/users", app.GetAllUsers).Methods("GET")
+
+	//Related to PRODUCTS DashBoard
+	app.Router.HandleFunc("/admin/products/update/{id}", app.UpdateProductForm).Methods("GET")
+	app.Router.HandleFunc("/admin/products/create", app.CreateProductForm).Methods("GET")
+	app.Router.HandleFunc("/admin/products", app.AdminProductsBoard).Methods("GET")
+
 }
 
 func (app *App) setAuthRoutes() {
@@ -98,11 +106,19 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("shop", template.Must(template.ParseFiles("templates/shop.html")))
 
 	templates.AddTemplate("profile", template.Must(template.ParseFiles("templates/profile.html")))
+
+	//Related to ADMIN USERS DASHBOARD
 	templates.AddTemplate("getAllUsers", template.Must(template.ParseFiles("templates/adminDashboard/getAllUsers.html")))
 	templates.AddTemplate("message", template.Must(template.ParseFiles("templates/adminDashboard/message.html")))
 	templates.AddTemplate("updateUser", template.Must(template.ParseFiles("templates/adminDashboard/updateUser.html")))
 	templates.AddTemplate("createUser", template.Must(template.ParseFiles("templates/adminDashboard/createUser.html")))
 
+	// Related to ADMIN PRODUCTS DASHBOARD
+	templates.AddTemplate("getAllProducts", template.Must(template.ParseFiles("templates/adminDashboard/productsBoard.html")))
+	templates.AddTemplate("createProduct", template.Must(template.ParseFiles("templates/adminDashboard/createProduct.html")))
+	templates.AddTemplate("updateProduct", template.Must(template.ParseFiles("templates/adminDashboard/updateProduct.html")))
+
+	// PRODUCTS FOR USERS
 	templates.AddTemplate("allProducts", template.Must(template.ParseFiles("templates/products/allProducts.html")))
 	templates.AddTemplate("buyProduct", template.Must(template.ParseFiles("templates/products/buyProduct.html")))
 	templates.AddTemplate("productCategory", template.Must(template.ParseFiles("templates/products/productCategory.html")))
