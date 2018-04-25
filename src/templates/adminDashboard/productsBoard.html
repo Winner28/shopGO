@@ -44,12 +44,12 @@
                        <td class="lalign">{{$value.Price}}</td>
                        <td class="lalign">
                           <form action=/products/update/{{$value.ID}} method="GET" if-none-match=”*”>
-                            <button class="btn" type="submit">Profile</button>
+                            <button class="btn" type="submit">Update</button>
                           </form></td>
                         </td>
                           <td class="lalign">
                               <form action=/products/delete/{{$value.ID}} method="POST" if-none-match=”*”>
-                                <button class="btn" type="submit">Update</button>
+                                <button class="btn" type="submit">Delete</button>
                               </form></td>
                             </td>
                     

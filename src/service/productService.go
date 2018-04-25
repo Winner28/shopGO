@@ -73,9 +73,15 @@ func (service *ProductService) Delete(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		ID, _ := strconv.Atoi(params["id"])
 		if err := service.DAO.Delete(ID); err != nil {
-			response.RespondError(w, http.StatusNotFound, err.Error())
+			if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorSystemProblems(err.Error())); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
-		response.RespondJSON(w, http.StatusOK, "Product Successfully Deleted")
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ProductSuccessfullyDeleted()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	} else {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

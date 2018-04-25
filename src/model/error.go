@@ -64,3 +64,7 @@ func UserSuccessfullyCreated(user User) Message {
 func ErrorSystemProblems(message string) Message {
 	return Message{"System problems", message}
 }
+
+func ProductSuccessfullyDeleted() Message {
+	return Message{"Deleted", "Product successfully deleted."}
+}

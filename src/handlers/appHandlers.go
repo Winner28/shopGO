@@ -65,10 +65,11 @@ func (app *App) setUsersRoutes() {
 }
 
 func (app *App) setProductRoutes() {
+	app.Router.HandleFunc("/products", app.CreateProduct).Methods("POST")
+	app.Router.HandleFunc("/products//update/{id}", app.UpdateProduct).Methods("POST")
+	app.Router.HandleFunc("/products/delete/{id}", app.DeleteProduct).Methods("POST")
+
 	app.Router.HandleFunc("/products/{id}", app.GetProduct).Methods("GET")
-	app.Router.HandleFunc("/products/{id}", app.CreateProduct).Methods("POST")
-	app.Router.HandleFunc("/products/{id}", app.UpdateProduct).Methods("PUT")
-	app.Router.HandleFunc("/products/{id}", app.DeleteProduct).Methods("DELETE")
 	app.Router.HandleFunc("/products", app.GetAllProducts).Methods("GET")
 	app.Router.HandleFunc("/category/clothes", app.GetClothesProducts).Methods("GET")
 	app.Router.HandleFunc("/category/techs", app.GetTechsProducts).Methods("GET")
@@ -114,7 +115,7 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("createUser", template.Must(template.ParseFiles("templates/adminDashboard/createUser.html")))
 
 	// Related to ADMIN PRODUCTS DASHBOARD
-	templates.AddTemplate("getAllProducts", template.Must(template.ParseFiles("templates/adminDashboard/productsBoard.html")))
+	templates.AddTemplate("productsBoard", template.Must(template.ParseFiles("templates/adminDashboard/productsBoard.html")))
 	templates.AddTemplate("createProduct", template.Must(template.ParseFiles("templates/adminDashboard/createProduct.html")))
 	templates.AddTemplate("updateProduct", template.Must(template.ParseFiles("templates/adminDashboard/updateProduct.html")))
 
