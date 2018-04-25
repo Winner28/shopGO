@@ -32,7 +32,7 @@ func GetProductService(dao productDAO) *ProductService {
 }
 
 func validateProductInput(product model.Product) error {
-	if product.Category == "" || product.Description == "" || product.Name == "" {
+	if product.Description == "" || product.Name == "" {
 		return errors.New("Fields cant be empty")
 	}
 	return nil

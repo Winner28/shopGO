@@ -59,7 +59,7 @@ func ErrorWhileCreatingProduct(message string) Message {
 }
 
 func ProductSuccessfullyUpdated(prod Product) Message {
-	return Message{"Successfully updated", "Product: " + prod.Name + " updated", "products"}
+	return Message{"Successfully updated", "Product: " + prod.Name + " updated", "users"}
 }
 
 func ProductSuccessfullyCreated(prod Product) Message {

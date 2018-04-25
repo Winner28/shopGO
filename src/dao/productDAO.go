@@ -22,10 +22,11 @@ func (dao *ProductDAO) Get(ID int) (model.Product, error) {
 }
 
 func (dao *ProductDAO) Create(product model.Product, category model.Category) (model.Product, error) {
-	if err := connection.GetConnection().DB.Create(&product).Error; err != nil {
+	pr := getProduct(product)
+	if err := connection.GetConnection().DB.Create(&pr).Error; err != nil {
 		return emptyProduct(), err
 	}
-	if err := dao.categoryDAO.CreateProductCategory(getProductCategory(product.ID, category)); err != nil {
+	if err := dao.categoryDAO.CreateProductCategory(getProductCategory(pr.ID, category)); err != nil {
 		return emptyProduct(), err
 	}
 	return product, nil
@@ -89,4 +90,19 @@ func (dao *ProductDAO) GetTechsProducts() ([]model.Product, error) {
 
 func emptyProduct() model.Product {
 	return model.Product{}
+}
+
+type Product struct {
+	ID          int
+	Name        string  `json:"name"`
+	Price       float64 `json:"price"`
+	Description string  `json:"description"`
+}
+
+func getProduct(p model.Product) Product {
+	return Product{
+		Name:        p.Name,
+		Price:       p.Price,
+		Description: p.Description,
+	}
 }
