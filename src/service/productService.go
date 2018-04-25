@@ -73,7 +73,7 @@ func (service *ProductService) Delete(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		ID, _ := strconv.Atoi(params["id"])
 		if err := service.DAO.Delete(ID); err != nil {
-			if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorSystemProblems(err.Error())); err != nil {
+			if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorSystemProblems(err.Error(), "products")); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -196,7 +196,7 @@ func (service *ProductService) ProductsBoard(w http.ResponseWriter, r *http.Requ
 	}
 	products, err := service.DAO.FindAll()
 	if err != nil {
-		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorSystemProblems(err.Error())); err != nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorSystemProblems(err.Error(), "products")); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

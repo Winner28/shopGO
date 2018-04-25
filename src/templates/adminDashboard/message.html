@@ -240,11 +240,11 @@
 		<!-- doesn't use context_content because it's ALWAYS the same thing -->
     <p>
       You may want to head back to the homepage.<br />
-      Or back to Users
+      Or back to {{ .BackTo}}
     </p>
 	</div>
 	<div class="buttons-container">
-		<a class="border-button" href="http://localhost:8080/users" target="_blank">Back to Users List</a>
+		<a class="border-button" href="http://localhost:8080/admin/{{ .BackTo}}" target="_blank">Back to {{ .BackTo}} List</a>
 		<a class="border-button" href="http://localhost:8080/home" target="_blank">Back to Home</a>
 	</div>
 </div>
