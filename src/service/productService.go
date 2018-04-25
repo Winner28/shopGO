@@ -157,13 +157,46 @@ func (service *ProductService) GetTechsProducts(w http.ResponseWriter, r *http.R
 }
 
 func (service *ProductService) UpdateForm(w http.ResponseWriter, r *http.Request) {
-
+	if access := getSecureService().checkIfAdmin(r); !access {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			return
+		}
+	}
 }
 
 func (service *ProductService) CreateForm(w http.ResponseWriter, r *http.Request) {
+	if access := getSecureService().checkIfAdmin(r); !access {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			return
+		}
+	}
 
 }
 
 func (service *ProductService) ProductsBoard(w http.ResponseWriter, r *http.Request) {
-
+	if access := getSecureService().checkIfAdmin(r); !access {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			return
+		}
+	}
+	products, err := service.DAO.FindAll()
+	if err != nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorSystemProblems(err.Error())); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	if err := resources.GetTemplatesContainer().GetTemplate("productsBoard").Execute(w, products); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }

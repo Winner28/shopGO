@@ -32,6 +32,10 @@ type Message struct {
 	Message string
 }
 
+func GetDefaultMessage(header, message string) Message {
+	return Message{header, message}
+}
+
 func UserSuccessfullyDeleted() Message {
 	return Message{"Deleted", "User successfully deleted."}
 }
@@ -55,4 +59,8 @@ func UserSuccessfullyUpdated(user User) Message {
 
 func UserSuccessfullyCreated(user User) Message {
 	return Message{"Successfully created", "User with EMAIL: " + user.Email + " created"}
+}
+
+func ErrorSystemProblems(message string) Message {
+	return Message{"System problems", message}
 }
