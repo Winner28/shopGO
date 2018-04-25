@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"log"
 	"managers"
 	"model"
@@ -30,10 +31,33 @@ func GetProductService(dao productDAO) *ProductService {
 	return &ProductService{dao}
 }
 
+func validateProductInput(product model.Product) error {
+	if product.Category == "" || product.Description == "" || product.Name == "" {
+		return errors.New("Fields cant be empty")
+	}
+	return nil
+}
+
 func (service *ProductService) Create(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) && secureService.checkIfAdmin(r) {
+		price, err := strconv.ParseFloat(r.FormValue("price"), 32)
+		if err != nil {
+			if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileCreatingProduct(err.Error())); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			return
+		}
 		product, category := service.getProductAndCategoryFromRequest(r)
-		product, err := service.DAO.Create(product, category)
+		product.Price = price
+		if err = validateProductInput(product); err != nil {
+			if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileCreatingProduct(err.Error())); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			return
+		}
+		product, err = service.DAO.Create(product, category)
 		if err != nil {
 			if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileCreatingProduct(err.Error())); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -12,10 +12,18 @@ type ProductCategoryDAO interface {
 	GetProductCategory(productID int) (model.ProductCategory, error)
 	GetProductsByCategoryID(ID int) ([]model.Product, error)
 	DeleteProductCategory(productID int) error
+	CreateProductCategory(category model.ProductCategory) error
 }
 
 func GetProductCategoryDAO() ProductCategoryDAO {
 	return &ProductCategoryDAOImpl{}
+}
+
+func (dao *ProductCategoryDAOImpl) CreateProductCategory(category model.ProductCategory) error {
+	if err := connection.GetConnection().DB.Create(&category).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (dao *ProductCategoryDAOImpl) GetProductCategory(productID int) (model.ProductCategory, error) {

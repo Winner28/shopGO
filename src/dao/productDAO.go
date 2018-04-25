@@ -21,16 +21,36 @@ func (dao *ProductDAO) Get(ID int) (model.Product, error) {
 	return product, nil
 }
 
-func (dao *ProductDAO) Create(product model.Product) (model.Product, error) {
+func (dao *ProductDAO) Create(product model.Product, category model.Category) (model.Product, error) {
 	if err := connection.GetConnection().DB.Create(&product).Error; err != nil {
 		return emptyProduct(), err
 	}
+	if err := dao.categoryDAO.CreateProductCategory(getProductCategory(product.ID, category)); err != nil {
+		return emptyProduct(), err
+	}
 	return product, nil
-
 }
 
 func (dao *ProductDAO) Update(ID int, product model.Product) (model.Product, error) {
 	return emptyProduct(), nil
+}
+
+func getProductCategory(ID int, cat model.Category) model.ProductCategory {
+	var catID int
+	switch cat.Name {
+	case "Clothes":
+		catID = 1
+		break
+	case "Technologies":
+		catID = 2
+		break
+	}
+
+	productCat := model.ProductCategory{
+		ProductID:  ID,
+		CategoryID: catID,
+	}
+	return productCat
 }
 
 func (dao *ProductDAO) Delete(ID int) error {
