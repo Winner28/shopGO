@@ -1,7 +1,6 @@
 package service
 
 import (
-	"encoding/json"
 	"log"
 	"managers"
 	"model"
@@ -15,7 +14,7 @@ import (
 
 type productDAO interface {
 	Get(ID int) (model.Product, error)
-	Create(product model.Product) (model.Product, error)
+	Create(product model.Product, category model.Category) (model.Product, error)
 	Update(ID int, product model.Product) (model.Product, error)
 	Delete(ID int) error
 	FindAll() ([]model.Product, error)
@@ -33,17 +32,18 @@ func GetProductService(dao productDAO) *ProductService {
 
 func (service *ProductService) Create(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) && secureService.checkIfAdmin(r) {
-		params := mux.Vars(r)
-		ID, _ := strconv.Atoi(params["id"])
-		var product model.Product
-		if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
-			response.RespondError(w, http.StatusMethodNotAllowed, err.Error())
+		product, category := service.getProductAndCategoryFromRequest(r)
+		product, err := service.DAO.Create(product, category)
+		if err != nil {
+			if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileCreatingProduct(err.Error())); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			return
 		}
-		product.ID = ID
-		product, err := service.DAO.Create(product)
-		if err != nil {
-			response.RespondError(w, http.StatusNotFound, err.Error())
+
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ProductSuccessfullyCreated(product)); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	} else {
@@ -162,12 +162,41 @@ func (service *ProductService) GetTechsProducts(w http.ResponseWriter, r *http.R
 	}
 }
 
+func (service *ProductService) getProductAndCategoryFromRequest(r *http.Request) (model.Product, model.Category) {
+	name := r.FormValue("name")
+	description := r.FormValue("description")
+	category := r.FormValue("category")
+	return model.Product{
+			Name:        name,
+			Description: description,
+		},
+		model.Category{
+			Name: category,
+		}
+
+}
+
 func (service *ProductService) UpdateForm(w http.ResponseWriter, r *http.Request) {
 	if access := getSecureService().checkIfAdmin(r); !access {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		} else {
+			return
+		}
+	}
+
+	params := mux.Vars(r)
+	ID, _ := strconv.Atoi(params["id"])
+
+	if product, err := service.DAO.Get(ID); err == nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("updateProduct").Execute(w, product); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.WeDontHaveSuchUser()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
@@ -181,6 +210,11 @@ func (service *ProductService) CreateForm(w http.ResponseWriter, r *http.Request
 		} else {
 			return
 		}
+	}
+
+	if err := resources.GetTemplatesContainer().GetTemplate("createProduct").Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 }

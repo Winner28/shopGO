@@ -163,7 +163,7 @@ func (service *UserService) UpdateForm(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.WeDontHaveSuchUser()); err != nil {
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.WeDontHaveSuchProduct()); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

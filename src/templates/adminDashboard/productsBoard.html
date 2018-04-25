@@ -25,8 +25,8 @@
 
         
                 <div id="wrapper">
-                 <h1>List of System Users</h1>
-                 
+                 <h1>List of System Products</h1>
+                <h1 style="font-size: 20px;"> <a class="border-button" href="http://localhost:8080/admin/products/create" target="_blank">Create Product</a> </h1>
                  <table id="keywords" cellspacing="0" cellpadding="0">
                    <thead>
                      <tr>
@@ -43,7 +43,7 @@
                        <td class="lalign">{{$value.Name}}</td>
                        <td class="lalign">{{$value.Price}}</td>
                        <td class="lalign">
-                          <form action=/products/update/{{$value.ID}} method="GET" if-none-match=”*”>
+                          <form action=/admin/products/update/{{$value.ID}} method="GET" if-none-match=”*”>
                             <button class="btn" type="submit">Update</button>
                           </form></td>
                         </td>

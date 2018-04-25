@@ -54,6 +54,18 @@ func ErrorWhileCreatingUser(message string) Message {
 
 }
 
+func ErrorWhileCreatingProduct(message string) Message {
+	return Message{"System problems", message, "products"}
+}
+
+func ProductSuccessfullyUpdated(prod Product) Message {
+	return Message{"Successfully updated", "Product: " + prod.Name + " updated", "products"}
+}
+
+func ProductSuccessfullyCreated(prod Product) Message {
+	return Message{"Successfully created", "Product: " + prod.Name + " created", "products"}
+}
+
 func UserSuccessfullyUpdated(user User) Message {
 	return Message{"Successfully updated", "User with EMAIL: " + user.Email + " updated", "users"}
 }
@@ -68,4 +80,8 @@ func ErrorSystemProblems(message, backTo string) Message {
 
 func ProductSuccessfullyDeleted() Message {
 	return Message{"Deleted", "Product successfully deleted.", "products"}
+}
+
+func WeDontHaveSuchProduct() Message {
+	return Message{"Look like you got lost", "We dont have such Product in our system", "products"}
 }
