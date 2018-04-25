@@ -112,7 +112,10 @@ func (service *UserService) Update(w http.ResponseWriter, r *http.Request) {
 	user, role := service.getUserAndRoleFromRequest(r)
 	user.ID = ID
 	role.UserID = ID
+	log.Println("Updating user:", user)
+	log.Println("Updating role:", role)
 	user, err := service.DAO.Update(user, role)
+
 	if err != nil {
 		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileUpdatingUser(err.Error())); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

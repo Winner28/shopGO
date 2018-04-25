@@ -47,7 +47,7 @@ func (dao *RoleDAO) Update(role model.Role) (model.Role, error) {
 	if err := dao.compareAndReturnRoleToUpdate(&role); err != nil {
 		return emptyRole(), errors.New("Error")
 	}
-	if err := connection.GetConnection().DB.Model(&role).Update("name", role.Name).Error; err != nil {
+	if err := connection.GetConnection().DB.Model(&role).Where("user_id = ?", role.UserID).Update("name", role.Name).Error; err != nil {
 		return emptyRole(), err
 	}
 	return role, nil
