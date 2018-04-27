@@ -16,7 +16,7 @@ import (
 type productDAO interface {
 	Get(ID int) (model.Product, error)
 	Create(product model.Product, category model.Category) (model.Product, error)
-	Update(ID int, product model.Product) (model.Product, error)
+	Update(product model.Product, category model.Category) (model.Product, error)
 	Delete(ID int) error
 	FindAll() ([]model.Product, error)
 	GetClothesProducts() ([]model.Product, error)

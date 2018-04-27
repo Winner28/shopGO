@@ -11,6 +11,7 @@ type ProductCategoryDAOImpl struct{}
 type ProductCategoryDAO interface {
 	GetProductCategory(productID int) (model.ProductCategory, error)
 	GetProductsByCategoryID(ID int) ([]model.Product, error)
+	UpdateProductCategory(category model.ProductCategory) error
 	DeleteProductCategory(productID int) error
 	CreateProductCategory(category model.ProductCategory) error
 }
@@ -34,6 +35,10 @@ func (dao *ProductCategoryDAOImpl) GetProductCategory(productID int) (model.Prod
 		return emptyProductCategory(), err
 	}
 	return category, nil
+}
+
+func (dao *ProductCategoryDAOImpl) UpdateProductCategory(category model.ProductCategory) error {
+	return nil
 }
 
 func (dao *ProductCategoryDAOImpl) GetProductsByCategoryID(ID int) ([]model.Product, error) {

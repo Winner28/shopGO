@@ -36,12 +36,12 @@ func (app *App) setRouters() {
 
 func (app *App) setAdminDashRoutes() {
 
-	// Related to USERS DashBoard
+	// Related VIEWS to USERS DashBoard
 	app.Router.HandleFunc("/admin/users/update/{id}", app.UpdateUserForm).Methods("GET")
 	app.Router.HandleFunc("/admin/user/create", app.CreateUserForm).Methods("GET")
 	app.Router.HandleFunc("/admin/users", app.GetAllUsers).Methods("GET")
 
-	//Related to PRODUCTS DashBoard
+	//Related VIEWS to PRODUCTS DashBoard
 	app.Router.HandleFunc("/admin/products/update/{id}", app.UpdateProductForm).Methods("GET")
 	app.Router.HandleFunc("/admin/products/create", app.CreateProductForm).Methods("GET")
 	app.Router.HandleFunc("/admin/products", app.AdminProductsBoard).Methods("GET")
@@ -66,7 +66,7 @@ func (app *App) setUsersRoutes() {
 
 func (app *App) setProductRoutes() {
 	app.Router.HandleFunc("/products", app.CreateProduct).Methods("POST")
-	app.Router.HandleFunc("/products//update/{id}", app.UpdateProduct).Methods("POST")
+	app.Router.HandleFunc("/products/update/{id}", app.UpdateProduct).Methods("POST")
 	app.Router.HandleFunc("/products/delete/{id}", app.DeleteProduct).Methods("POST")
 
 	app.Router.HandleFunc("/products/{id}", app.GetProduct).Methods("GET")

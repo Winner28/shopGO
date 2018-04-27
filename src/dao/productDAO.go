@@ -32,8 +32,15 @@ func (dao *ProductDAO) Create(product model.Product, category model.Category) (m
 	return product, nil
 }
 
-func (dao *ProductDAO) Update(ID int, product model.Product) (model.Product, error) {
-	return emptyProduct(), nil
+func (dao *ProductDAO) Update(product model.Product, category model.Category) (model.Product, error) {
+	pr := getProduct(product)
+	if err := connection.GetConnection().DB.Save(&pr).Error; err != nil {
+		return emptyProduct(), err
+	}
+	if err := dao.categoryDAO.UpdateProductCategory(getProductCategory(pr.ID, category)); err != nil {
+		return emptyProduct(), err
+	}
+	return product, nil
 }
 
 func getProductCategory(ID int, cat model.Category) model.ProductCategory {
