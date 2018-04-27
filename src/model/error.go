@@ -58,8 +58,12 @@ func ErrorWhileCreatingProduct(message string) Message {
 	return Message{"System problems", message, "products"}
 }
 
+func ErrorWhileUpdatingProduct(message string) Message {
+	return Message{"System problems", message, "products"}
+}
+
 func ProductSuccessfullyUpdated(prod Product) Message {
-	return Message{"Successfully updated", "Product: " + prod.Name + " updated", "users"}
+	return Message{"Successfully updated", "Product: " + prod.Name + " updated", "products"}
 }
 
 func ProductSuccessfullyCreated(prod Product) Message {

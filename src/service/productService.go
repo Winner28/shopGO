@@ -78,6 +78,50 @@ func (service *ProductService) Create(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (service *ProductService) Update(w http.ResponseWriter, r *http.Request) {
+	if managers.GetSessionManager().UserLoggedIn(r) && secureService.checkIfAdmin(r) {
+		var price float64
+		var err error
+		ID, _ := strconv.Atoi(mux.Vars(r)["id"])
+		if r.FormValue("price") == "" {
+			price = 0
+		} else {
+			price, err = strconv.ParseFloat(r.FormValue("price"), 32)
+			if err != nil {
+				if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileCreatingProduct(err.Error())); err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				return
+			}
+		}
+		product, category := service.getProductAndCategoryFromRequest(r)
+		product.Price = price
+		product.ID = ID
+		log.Println("Updating product:", product)
+		product, err = service.DAO.Update(product, category)
+
+		if err != nil {
+			if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ErrorWhileUpdatingProduct(err.Error())); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			return
+		}
+
+		if err := resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.ProductSuccessfullyUpdated(product)); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
 func (service *ProductService) Get(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	ID, _ := strconv.Atoi(params["id"])
@@ -112,10 +156,6 @@ func (service *ProductService) Delete(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-}
-
-func (service *ProductService) Update(w http.ResponseWriter, r *http.Request) {
-	response.RespondJSON(w, http.StatusOK, "Value Updated")
 }
 
 func (service *ProductService) GetAll(w http.ResponseWriter, r *http.Request) {

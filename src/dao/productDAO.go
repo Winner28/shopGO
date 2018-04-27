@@ -2,6 +2,7 @@ package dao
 
 import (
 	"connection"
+	"log"
 	"model"
 )
 
@@ -33,14 +34,22 @@ func (dao *ProductDAO) Create(product model.Product, category model.Category) (m
 }
 
 func (dao *ProductDAO) Update(product model.Product, category model.Category) (model.Product, error) {
-	pr := dao.compareAndReturnProductToUpdate(product)
+	pr := dao.compareAndReturnProductToUpdate(&product)
+	log.Println("Updating product:", pr)
+
 	if err := connection.GetConnection().DB.Save(&pr).Error; err != nil {
 		return emptyProduct(), err
 	}
-	if err := dao.categoryDAO.UpdateProductCategory(getProductCategory(pr.ID, category)); err != nil {
-		return emptyProduct(), err
+	if !emptyCategory(category.Name) {
+		if err := dao.categoryDAO.UpdateProductCategory(getProductCategory(pr.ID, category)); err != nil {
+			return emptyProduct(), err
+		}
 	}
 	return product, nil
+}
+
+func emptyCategory(category string) bool {
+	return category == ""
 }
 
 func getProductCategory(ID int, cat model.Category) model.ProductCategory {
@@ -61,7 +70,7 @@ func getProductCategory(ID int, cat model.Category) model.ProductCategory {
 	return productCat
 }
 
-func (dao *ProductDAO) compareAndReturnProductToUpdate(product model.Product) Product {
+func (dao *ProductDAO) compareAndReturnProductToUpdate(product *model.Product) Product {
 	oldProduct, _ := dao.Get(product.ID)
 	if product.Description == "" {
 		product.Description = oldProduct.Description
@@ -73,7 +82,7 @@ func (dao *ProductDAO) compareAndReturnProductToUpdate(product model.Product) Pr
 		product.Price = oldProduct.Price
 	}
 
-	return getProduct(product)
+	return getProduct(*product)
 }
 
 func (dao *ProductDAO) Delete(ID int) error {
@@ -123,6 +132,7 @@ type Product struct {
 
 func getProduct(p model.Product) Product {
 	return Product{
+		ID:          p.ID,
 		Name:        p.Name,
 		Price:       p.Price,
 		Description: p.Description,
