@@ -33,7 +33,7 @@ func (dao *ProductDAO) Create(product model.Product, category model.Category) (m
 }
 
 func (dao *ProductDAO) Update(product model.Product, category model.Category) (model.Product, error) {
-	pr := getProduct(product)
+	pr := dao.compareAndReturnProductToUpdate(product)
 	if err := connection.GetConnection().DB.Save(&pr).Error; err != nil {
 		return emptyProduct(), err
 	}
@@ -59,6 +59,21 @@ func getProductCategory(ID int, cat model.Category) model.ProductCategory {
 		CategoryID: catID,
 	}
 	return productCat
+}
+
+func (dao *ProductDAO) compareAndReturnProductToUpdate(product model.Product) Product {
+	oldProduct, _ := dao.Get(product.ID)
+	if product.Description == "" {
+		product.Description = oldProduct.Description
+	}
+	if product.Name == "" {
+		product.Name = oldProduct.Name
+	}
+	if product.Price == 0 {
+		product.Price = oldProduct.Price
+	}
+
+	return getProduct(product)
 }
 
 func (dao *ProductDAO) Delete(ID int) error {

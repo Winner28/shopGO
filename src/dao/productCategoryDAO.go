@@ -38,6 +38,9 @@ func (dao *ProductCategoryDAOImpl) GetProductCategory(productID int) (model.Prod
 }
 
 func (dao *ProductCategoryDAOImpl) UpdateProductCategory(category model.ProductCategory) error {
+	if err := connection.GetConnection().DB.Model(&category).Where("product_id = ?", category.ProductID).Update("category_id", category.CategoryID).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
