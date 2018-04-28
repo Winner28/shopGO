@@ -325,6 +325,14 @@ func (service *ProductService) ProductsBoard(w http.ResponseWriter, r *http.Requ
 	}
 }
 
-func (service *ProductService) getOrderFromRequest(r *http.Request) model.Order, error{
+func (service *ProductService) getOrderFromRequest(r *http.Request) (model.Order, error) {
+	firstName := r.FormValue("firstname")
+	lastName := r.FormValue("lastname")
+	password := r.FormValue("password")
+	email := r.FormValue("email")
+	role := r.FormValue("role")
+}
 
+func validateOrderInput(order model.Order) bool {
+	return false
 }
