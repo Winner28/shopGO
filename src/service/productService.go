@@ -9,6 +9,7 @@ import (
 	"resources"
 	"response"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -333,8 +334,12 @@ func (service *ProductService) getOrderFromRequest(r *http.Request) (model.Order
 		return model.Order{}, errors.New("Bad ammount input! PLease enter a number beetween 1 and 100")
 	}
 
-	userID := managers.GetSessionManager().GetUserEmail(r)
+	userID := managers.GetSessionManager().GetUserID(r)
+	amm, _ := strconv.Atoi(ammount)
 
+	order.UserID = userID
+	order.Amount = amm
+	order.Date = time.Now()
 	return order, nil
 }
 

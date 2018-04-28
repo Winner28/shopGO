@@ -1,6 +1,7 @@
 package managers
 
 import (
+	"dao"
 	"net/http"
 
 	"github.com/gorilla/securecookie"
@@ -17,10 +18,12 @@ var cookieHandler = securecookie.New(
 	securecookie.GenerateRandomKey(32))
 
 var sessionManager *SessionManager
+var userDAO *dao.UserDAO
 
 func init() {
 	sessionManager = new(SessionManager)
 	sessionManager.name = "Session Manager v0.0.1"
+	userDAO = dao.GetUserDAO()
 }
 
 func GetSessionManager() *SessionManager {
@@ -63,8 +66,8 @@ func (manager *SessionManager) GetUserEmail(request *http.Request) (userEmail st
 
 func (manager *SessionManager) GetUserID(request *http.Request) (userID int) {
 	userEmail := manager.GetUserEmail(request)
-
-	return userEmail
+	user, _ := userDAO.GetUserByEmail(userEmail)
+	return user.ID
 }
 
 // Returns true if User Logged In
