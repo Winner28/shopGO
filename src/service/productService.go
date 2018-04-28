@@ -197,7 +197,14 @@ func (service *ProductService) BuyProductPage(w http.ResponseWriter, r *http.Req
 func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) {
 		//params := mux.Vars(r)
+		//
+		order, error := service.getOrderFromRequest(r)
+		if error != nil {
+			// logic
+			return
+		} else {
 
+		}
 	} else {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "If you want buy a product you need to login first!")); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -316,4 +323,8 @@ func (service *ProductService) ProductsBoard(w http.ResponseWriter, r *http.Requ
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func (service *ProductService) getOrderFromRequest(r *http.Request) model.Order, error{
+
 }
