@@ -22,6 +22,7 @@ type productDAO interface {
 	FindAll() ([]model.Product, error)
 	GetClothesProducts() ([]model.Product, error)
 	GetTechsProducts() ([]model.Product, error)
+	CreateOrder(order model.Order, productID int) (model.Order, error)
 }
 
 type ProductService struct {
@@ -198,13 +199,16 @@ func (service *ProductService) BuyProductPage(w http.ResponseWriter, r *http.Req
 func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) {
 		params := mux.Vars(r)
-		productID, _ := strconv.Atoi(params["id"])
 		order, error := service.getOrderFromRequest(r)
 		if error != nil {
 			// logic
 			return
 		} else {
-
+			productID, _ := strconv.Atoi(params["id"])
+			order, err := service.DAO.CreateOrder(order, productID)
+			if err != nil {
+				//logic HTTP.STATUSINTERNALSERVERERROR
+			}
 		}
 	} else {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "If you want buy a product you need to login first!")); err != nil {

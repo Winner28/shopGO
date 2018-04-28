@@ -96,6 +96,10 @@ func (dao *ProductDAO) Delete(ID int) error {
 
 }
 
+func (dao *ProductDAO) CreateOrder(order model.Order, productID int) (model.Order, error) {
+	return emptyOrder(), nil
+}
+
 func (dao *ProductDAO) FindAll() ([]model.Product, error) {
 	var products []model.Product
 	if err := connection.GetConnection().DB.Find(&products).Error; err != nil {
