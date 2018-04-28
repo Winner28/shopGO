@@ -73,7 +73,10 @@ func (app *App) setProductRoutes() {
 	app.Router.HandleFunc("/products", app.GetAllProducts).Methods("GET")
 	app.Router.HandleFunc("/category/clothes", app.GetClothesProducts).Methods("GET")
 	app.Router.HandleFunc("/category/techs", app.GetTechsProducts).Methods("GET")
-	app.Router.HandleFunc("/products/buy/{id}", app.BuyProduct).Methods("GET")
+
+	app.Router.HandleFunc("/products/buy/{id}", app.BuyProductPage).Methods("GET")
+	app.Router.HandleFunc("/products/buy/{id}", app.BuyProduct).Methods("POST")
+
 }
 
 func (app *App) setRoleRoutes() {

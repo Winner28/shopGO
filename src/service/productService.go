@@ -169,7 +169,7 @@ func (service *ProductService) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request) {
+func (service *ProductService) BuyProductPage(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) {
 		params := mux.Vars(r)
 		ID, _ := strconv.Atoi(params["id"])
@@ -187,6 +187,19 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 		}
 	} else {
 		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.NotAuthorizedError()); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+	}
+}
+
+func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request) {
+	if managers.GetSessionManager().UserLoggedIn(r) {
+		//params := mux.Vars(r)
+
+	} else {
+		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "If you want buy a product you need to login first!")); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

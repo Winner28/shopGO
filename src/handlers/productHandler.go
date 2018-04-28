@@ -38,6 +38,10 @@ func (app *App) BuyProduct(w http.ResponseWriter, r *http.Request) {
 	productService.BuyProduct(w, r)
 }
 
+func (app *App) BuyProductPage(w http.ResponseWriter, r *http.Request) {
+	productService.BuyProductPage(w, r)
+}
+
 func (app *App) GetClothesProducts(w http.ResponseWriter, r *http.Request) {
 	productService.GetClothesProducts(w, r)
 }

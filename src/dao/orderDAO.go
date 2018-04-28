@@ -1,12 +1,12 @@
 package dao
 
 import (
+	"connection"
 	"model"
-	"time"
 )
 
 type OrderDAO interface {
-	createOrder(userID, productID, amount int, date time.Time) (model.Order, error)
+	createOrder(order model.Order) (model.Order, error)
 	getOrdersByUserID(userID int)
 }
 
@@ -17,11 +17,18 @@ func GetOrderDAO() OrderDAO {
 	return &OrderDAOIMpl{}
 }
 
-func (dao *OrderDAOIMpl) createOrder(userID, productID, amount int, date time.Time) (model.Order, error) {
+func (dao *OrderDAOIMpl) createOrder(order model.Order) (model.Order, error) {
+	if err := connection.GetConnection().DB.Create(&order).Error; err != nil {
+		return emptyOrder(), err
+	}
 	return model.Order{}, nil
 }
 
 // getting all user orders!
 func (dao *OrderDAOIMpl) getOrdersByUserID(userID int) {
 
+}
+
+func emptyOrder() model.Order {
+	return model.Order{}
 }
