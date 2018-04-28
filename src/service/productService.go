@@ -196,8 +196,8 @@ func (service *ProductService) BuyProductPage(w http.ResponseWriter, r *http.Req
 
 func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) {
-		//params := mux.Vars(r)
-		//
+		params := mux.Vars(r)
+		productID, _ := strconv.Atoi(params["id"])
 		order, error := service.getOrderFromRequest(r)
 		if error != nil {
 			// logic
@@ -326,13 +326,23 @@ func (service *ProductService) ProductsBoard(w http.ResponseWriter, r *http.Requ
 }
 
 func (service *ProductService) getOrderFromRequest(r *http.Request) (model.Order, error) {
-	firstName := r.FormValue("firstname")
-	lastName := r.FormValue("lastname")
-	password := r.FormValue("password")
-	email := r.FormValue("email")
-	role := r.FormValue("role")
+	var order model.Order
+
+	ammount := r.FormValue("ammount")
+	if valid := validateAmmountInput(ammount); !valid {
+		return model.Order{}, errors.New("Bad ammount input! PLease enter a number beetween 1 and 100")
+	}
+
+	userID := managers.GetSessionManager().GetUserEmail(r)
+
+	return order, nil
 }
 
-func validateOrderInput(order model.Order) bool {
-	return false
+func validateAmmountInput(ammount string) bool {
+	if amm, error := strconv.Atoi(ammount); error != nil || amm < 1 {
+		return false
+	}
+
+	return true
+
 }

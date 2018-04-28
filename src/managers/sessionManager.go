@@ -61,6 +61,12 @@ func (manager *SessionManager) GetUserEmail(request *http.Request) (userEmail st
 	return userEmail
 }
 
+func (manager *SessionManager) GetUserID(request *http.Request) (userID int) {
+	userEmail := manager.GetUserEmail(request)
+
+	return userEmail
+}
+
 // Returns true if User Logged In
 func (manager *SessionManager) UserLoggedIn(request *http.Request) bool {
 	return manager.GetUserEmail(request) != ""
