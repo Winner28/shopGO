@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"managers"
 	"model"
@@ -207,10 +208,13 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 			productID, _ := strconv.Atoi(params["id"])
 			order, err := service.DAO.CreateOrder(order, productID)
 			if err != nil {
-				if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "If you want buy a product you need to login first!")); err != nil {
+				if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusInternalServerError, "Server error")); err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 				}
-				return
+				log.Println("Failed to create an order!", order)
+			} else {
+				//resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetDefaultMessage(http.StatusForbidden, "If you want buy a product you need to login first!"))
+				fmt.Fprintln(w, "U successfully buy product")
 			}
 		}
 	} else {
