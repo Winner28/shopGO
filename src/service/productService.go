@@ -208,13 +208,12 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 			productID, _ := strconv.Atoi(params["id"])
 			order, err := service.DAO.CreateOrder(order, productID)
 			if err != nil {
-				if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusInternalServerError, "Server error")); err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-				}
-				log.Println("Failed to create an order!", order)
+				resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusInternalServerError, "Server error"))
+				log.Println("Failed to create an order!", err.Error())
 			} else {
 				//resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetDefaultMessage(http.StatusForbidden, "If you want buy a product you need to login first!"))
 				fmt.Fprintln(w, "U successfully buy product")
+				log.Println("Order created:", order)
 			}
 		}
 	} else {

@@ -8,10 +8,11 @@ import (
 
 type ProductDAO struct {
 	categoryDAO ProductCategoryDAO
+	orderDAO    OrderDAO
 }
 
 func GetProductDAO() *ProductDAO {
-	return &ProductDAO{GetProductCategoryDAO()}
+	return &ProductDAO{GetProductCategoryDAO(), GetOrderDAO()}
 }
 
 func (dao *ProductDAO) Get(ID int) (model.Product, error) {
@@ -97,7 +98,11 @@ func (dao *ProductDAO) Delete(ID int) error {
 }
 
 func (dao *ProductDAO) CreateOrder(order model.Order, productID int) (model.Order, error) {
-	return emptyOrder(), nil
+	order, err := dao.orderDAO.createOrder(order, productID)
+	if err != nil {
+		return emptyOrder(), err
+	}
+	return order, nil
 }
 
 func (dao *ProductDAO) FindAll() ([]model.Product, error) {

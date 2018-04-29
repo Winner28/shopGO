@@ -6,22 +6,27 @@ import (
 )
 
 type OrderDAO interface {
-	createOrder(order model.Order) (model.Order, error)
+	createOrder(order model.Order, productID int) (model.Order, error)
 	getOrdersByUserID(userID int)
 }
 
 type OrderDAOIMpl struct {
+	productOrderDAO ProductOrderDAO
 }
 
 func GetOrderDAO() OrderDAO {
 	return &OrderDAOIMpl{}
 }
 
-func (dao *OrderDAOIMpl) createOrder(order model.Order) (model.Order, error) {
+func (dao *OrderDAOIMpl) createOrder(order model.Order, productID int) (model.Order, error) {
 	if err := connection.GetConnection().DB.Create(&order).Error; err != nil {
 		return emptyOrder(), err
 	}
-	return model.Order{}, nil
+	if err := dao.productOrderDAO.Create(order.ID, productID); err != nil {
+		return emptyOrder(), err
+	}
+
+	return order, nil
 }
 
 // getting all user orders!
