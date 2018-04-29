@@ -207,7 +207,10 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 			productID, _ := strconv.Atoi(params["id"])
 			order, err := service.DAO.CreateOrder(order, productID)
 			if err != nil {
-				//logic HTTP.STATUSINTERNALSERVERERROR
+				if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "If you want buy a product you need to login first!")); err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+				}
+				return
 			}
 		}
 	} else {
