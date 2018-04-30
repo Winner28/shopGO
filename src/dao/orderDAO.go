@@ -15,7 +15,7 @@ type OrderDAOIMpl struct {
 }
 
 func GetOrderDAO() OrderDAO {
-	return &OrderDAOIMpl{}
+	return &OrderDAOIMpl{GetProductOrderDAO()}
 }
 
 func (dao *OrderDAOIMpl) createOrder(order model.Order, productID int) (model.Order, error) {
