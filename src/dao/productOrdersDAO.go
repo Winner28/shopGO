@@ -17,8 +17,9 @@ func GetProductOrderDAO() ProductOrderDAO {
 	return &ProductOrderDAOImpl{}
 }
 
-func (productOder *ProductOrderDAOImpl) Create(orderID, productID int) error {
-	if err := connection.GetConnection().DB.Create(getProductOrder(orderID, productID)).Error; err != nil {
+func (dao *ProductOrderDAOImpl) Create(orderID, productID int) error {
+	productOrder := getProductOrder(orderID, productID)
+	if err := connection.GetConnection().DB.Create(&productOrder).Error; err != nil {
 		return err
 	}
 	return nil
