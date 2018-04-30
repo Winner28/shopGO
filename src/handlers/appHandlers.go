@@ -62,6 +62,7 @@ func (app *App) setUsersRoutes() {
 	app.Router.HandleFunc("/users/{id}", app.UpdateUser).Methods("PUT")
 	app.Router.HandleFunc("/users/update/{id}", app.UpdateUser).Methods("POST")
 	app.Router.HandleFunc("/users/delete/{id}", app.DeleteUser).Methods("POST")
+
 }
 
 func (app *App) setProductRoutes() {
@@ -76,6 +77,8 @@ func (app *App) setProductRoutes() {
 
 	app.Router.HandleFunc("/products/buy/{id}", app.BuyProductPage).Methods("GET")
 	app.Router.HandleFunc("/products/buy/{id}", app.BuyProduct).Methods("POST")
+
+	app.Router.HandleFunc("/orders", app.UserOrders).Methods("GET")
 
 }
 

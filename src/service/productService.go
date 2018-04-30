@@ -255,6 +255,16 @@ func (service *ProductService) GetTechsProducts(w http.ResponseWriter, r *http.R
 	}
 }
 
+func (service *ProductService) UserOrders(w http.ResponseWriter, r *http.Request) {
+	if managers.GetSessionManager().UserLoggedIn(r) {
+		service.DAO.Create
+		resources.GetTemplatesContainer().GetTemplate("userOrders").Execute(w, nil)
+	} else {
+		resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "You need to login to see your orders!"))
+
+	}
+}
+
 func (service *ProductService) getProductAndCategoryFromRequest(r *http.Request) (model.Product, model.Category) {
 	name := r.FormValue("name")
 	description := r.FormValue("description")

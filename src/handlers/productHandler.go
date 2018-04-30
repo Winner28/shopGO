@@ -49,3 +49,7 @@ func (app *App) GetClothesProducts(w http.ResponseWriter, r *http.Request) {
 func (app *App) GetTechsProducts(w http.ResponseWriter, r *http.Request) {
 	productService.GetTechsProducts(w, r)
 }
+
+func (app *App) UserOrders(w http.ResponseWriter, r *http.Request) {
+	productService.UserOrders(w, r)
+}
