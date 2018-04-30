@@ -211,7 +211,6 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 				resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusInternalServerError, "Server error"))
 				log.Println("Failed to create an order!", err.Error())
 			} else {
-				//resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetDefaultMessage(http.StatusForbidden, "If you want buy a product you need to login first!"))
 				fmt.Fprintln(w, "U successfully buy product")
 				log.Println("Order created:", order)
 			}
