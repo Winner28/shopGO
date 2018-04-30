@@ -257,7 +257,7 @@ func (service *ProductService) GetTechsProducts(w http.ResponseWriter, r *http.R
 
 func (service *ProductService) UserOrders(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) {
-		service.DAO.Create
+		//	service.DAO.Create
 		resources.GetTemplatesContainer().GetTemplate("userOrders").Execute(w, nil)
 	} else {
 		resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "You need to login to see your orders!"))
