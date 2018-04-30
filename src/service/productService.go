@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"managers"
 	"model"
@@ -202,7 +201,7 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 		params := mux.Vars(r)
 		order, error := service.getOrderFromRequest(r)
 		if error != nil {
-			// logic
+			resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusConflict, "Ammount must be a positive value!"))
 			return
 		} else {
 			productID, _ := strconv.Atoi(params["id"])
@@ -211,8 +210,8 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 				resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusInternalServerError, "Server error"))
 				log.Println("Failed to create an order!", err.Error())
 			} else {
-				fmt.Fprintln(w, "U successfully buy product")
 				log.Println("Order created:", order)
+				resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.OrderSuccessfullyCreated())
 			}
 		}
 	} else {

@@ -37,6 +37,10 @@ func GetDefaultMessage(header, message, backTo string) Message {
 	return Message{header, message, backTo}
 }
 
+func OrderSuccessfullyCreated() Message {
+	return Message{"Success!", "You successfully create an order! Look up on your done orders!", "orders"}
+}
+
 func UserSuccessfullyDeleted() Message {
 	return Message{"Deleted", "User successfully deleted.", "users"}
 }
