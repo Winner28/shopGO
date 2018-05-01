@@ -97,6 +97,14 @@ func (dao *ProductDAO) Delete(ID int) error {
 
 }
 
+func (dao *ProductDAO) GetUserOrders(userID int) ([]model.UserOrder, error) {
+	orders, err := dao.orderDAO.getOrdersByUserID(userID)
+	if err != nil {
+		return nil, err
+	}
+	return orders, err
+}
+
 func (dao *ProductDAO) CreateOrder(order model.Order, productID int) (model.Order, error) {
 	order, err := dao.orderDAO.createOrder(order, productID)
 	if err != nil {

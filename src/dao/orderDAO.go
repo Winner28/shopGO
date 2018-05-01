@@ -7,7 +7,7 @@ import (
 
 type OrderDAO interface {
 	createOrder(order model.Order, productID int) (model.Order, error)
-	getOrdersByUserID(userID int)
+	getOrdersByUserID(userID int) ([]model.UserOrder, error)
 }
 
 type OrderDAOIMpl struct {
@@ -30,8 +30,8 @@ func (dao *OrderDAOIMpl) createOrder(order model.Order, productID int) (model.Or
 }
 
 // getting all user orders!
-func (dao *OrderDAOIMpl) getOrdersByUserID(userID int) {
-
+func (dao *OrderDAOIMpl) getOrdersByUserID(userID int) ([]model.UserOrder, error) {
+	return nil, nil
 }
 
 func emptyOrder() model.Order {
