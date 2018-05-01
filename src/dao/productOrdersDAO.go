@@ -37,7 +37,9 @@ func (dao *ProductOrderDAOImpl) Get(orderID int) (productID int, err error) {
 	if !rows.Next() {
 		return -1, errors.New("Have no product with such order id!")
 	}
-	rows.Scan(&productID)
+	if err = rows.Scan(&productID); err != nil {
+		return -1, err
+	}
 	return productID, nil
 }
 
