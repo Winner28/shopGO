@@ -9,7 +9,7 @@ import (
 type (
 	ProductOrderDAO interface {
 		Create(orderID, productID int) error
-		Get(orderID int) (productID int, err error)
+		GetProductIDByOrderID(orderID int) (productID int, err error)
 	}
 
 	ProductOrderDAOImpl struct{}
@@ -27,8 +27,7 @@ func (dao *ProductOrderDAOImpl) Create(orderID, productID int) error {
 	return nil
 }
 
-func (dao *ProductOrderDAOImpl) Get(orderID int) (productID int, err error) {
-
+func (dao *ProductOrderDAOImpl) GetProductIDByOrderID(orderID int) (productID int, err error) {
 	rows, err := connection.GetConnection().DB.Select("product_id").Where("order_id = ?", orderID).Rows()
 	if err != nil {
 		return -1, err

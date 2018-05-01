@@ -31,6 +31,11 @@ func (dao *OrderDAOIMpl) createOrder(order model.Order, productID int) (model.Or
 
 // getting all user orders!
 func (dao *OrderDAOIMpl) getOrdersByUserID(userID int) ([]model.UserOrder, error) {
+	var orders []model.Order
+	if err := connection.GetConnection().DB.Find(&orders).Where("user_id=?", userID).Error; err != nil {
+		return nil, err
+	}
+
 	return nil, nil
 }
 
