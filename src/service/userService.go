@@ -30,12 +30,8 @@ func GetUserService(dao userDAO) *UserService {
 
 func (service *UserService) Create(w http.ResponseWriter, r *http.Request) {
 	if access := getSecureService().checkIfAdmin(r); !access {
-		if err := resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError()); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		} else {
-			return
-		}
+		resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetAccessDeniedError())
+		return
 	}
 	user, role := service.getUserAndRoleFromRequest(r)
 	user, err := service.DAO.Create(user, role)
