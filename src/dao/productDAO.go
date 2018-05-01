@@ -102,6 +102,13 @@ func (dao *ProductDAO) GetUserOrders(userID int) ([]model.UserOrder, error) {
 	if err != nil {
 		return nil, err
 	}
+	for _, value := range orders {
+		if product, err := dao.Get(value.ProductID); err == nil {
+
+		} else {
+			return nil, err
+		}
+	}
 	return orders, err
 }
 
