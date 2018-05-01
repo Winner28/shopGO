@@ -23,6 +23,7 @@ type productDAO interface {
 	GetClothesProducts() ([]model.Product, error)
 	GetTechsProducts() ([]model.Product, error)
 	CreateOrder(order model.Order, productID int) (model.Order, error)
+	GetUserOrders(userID int) (model.UserOrder, error)
 }
 
 type ProductService struct {
@@ -257,7 +258,11 @@ func (service *ProductService) GetTechsProducts(w http.ResponseWriter, r *http.R
 
 func (service *ProductService) UserOrders(w http.ResponseWriter, r *http.Request) {
 	if managers.GetSessionManager().UserLoggedIn(r) {
-		//	service.DAO.Create
+		orders, err := service.DAO.GetUserOrders(1)
+		if err != nil {
+			resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetInternalServerErrorError())
+
+		}
 		resources.GetTemplatesContainer().GetTemplate("userOrders").Execute(w, nil)
 	} else {
 		resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "You need to login to see your orders!"))
