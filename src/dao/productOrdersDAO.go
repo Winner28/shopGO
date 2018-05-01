@@ -28,7 +28,7 @@ func (dao *ProductOrderDAOImpl) Create(orderID, productID int) error {
 }
 
 func (dao *ProductOrderDAOImpl) GetProductIDByOrderID(orderID int) (productID int, err error) {
-	rows, err := connection.GetConnection().DB.Select("product_id").Where("order_id = ?", orderID).Rows()
+	rows, err := connection.GetConnection().DB.Table("product_orders").Select("product_id").Where("order_id = ?", orderID).Rows()
 	if err != nil {
 		return -1, err
 	}

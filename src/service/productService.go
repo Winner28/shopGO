@@ -261,13 +261,13 @@ func (service *ProductService) UserOrders(w http.ResponseWriter, r *http.Request
 		userID := managers.GetSessionManager().GetUserID(r)
 		orders, err := service.DAO.GetUserOrders(userID)
 		if err != nil {
+			log.Println(err)
 			resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetInternalServerErrorError())
-
+			return
 		}
 		resources.GetTemplatesContainer().GetTemplate("userOrders").Execute(w, orders)
 	} else {
 		resources.GetTemplatesContainer().GetTemplate("error").Execute(w, model.GetError(http.StatusForbidden, "You need to login to see your orders!"))
-
 	}
 }
 

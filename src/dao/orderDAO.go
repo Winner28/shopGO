@@ -33,21 +33,26 @@ func (dao *OrderDAOIMpl) createOrder(order model.Order, productID int) (model.Or
 // getting all user orders!
 func (dao *OrderDAOIMpl) getOrdersByUserID(userID int) ([]model.UserOrder, error) {
 	var orders []model.Order
-	var productsID []int
+	var userOrders []model.UserOrder
 	if err := connection.GetConnection().DB.Find(&orders).Where("user_id=?", userID).Error; err != nil {
 		return nil, err
 	}
 
 	for _, value := range orders {
+		log.Println(value)
 		if productID, err := dao.productOrderDAO.GetProductIDByOrderID(value.ID); err == nil {
-			productsID = append(productsID, productID)
+			userOrders = append(userOrders, model.UserOrder{
+				ProductID: productID,
+				Ammount:   value.Amount,
+				Date:      value.Date,
+			})
 		} else {
 			log.Println("Error when we try to get productID by order ID!")
 			return nil, err
 		}
 	}
 
-	return nil, nil
+	return userOrders, nil
 }
 
 func emptyOrder() model.Order {
