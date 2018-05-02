@@ -130,6 +130,7 @@ func (app *App) setTemplates() {
 	templates.AddTemplate("buyProduct", template.Must(template.ParseFiles("templates/products/buyProduct.html")))
 	templates.AddTemplate("productCategory", template.Must(template.ParseFiles("templates/products/productCategory.html")))
 	templates.AddTemplate("userOrders", template.Must(template.ParseFiles("templates/userOrders.html")))
+	templates.AddTemplate("userMessage", template.Must(template.ParseFiles("templates/userMessage.html")))
 
 	app.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
 }

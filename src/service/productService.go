@@ -212,7 +212,7 @@ func (service *ProductService) BuyProduct(w http.ResponseWriter, r *http.Request
 				log.Println("Failed to create an order!", err.Error())
 			} else {
 				log.Println("Order created:", order)
-				resources.GetTemplatesContainer().GetTemplate("message").Execute(w, model.OrderSuccessfullyCreated())
+				resources.GetTemplatesContainer().GetTemplate("userMessage").Execute(w, model.OrderSuccessfullyCreated())
 			}
 		}
 	} else {
