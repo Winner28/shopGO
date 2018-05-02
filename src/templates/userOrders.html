@@ -31,7 +31,7 @@ body {
   font-weight: 300;
   line-height: 1.42em;
   color:#A7A1AE;
-  background-color:#1F2739;
+  background-color:rgb(255, 255, 255);
 }
 
 h1 {
@@ -39,7 +39,7 @@ h1 {
   font-weight: 300;
   line-height:1em;
   text-align: center;
-  color: #4DC3FA;
+  color:#080808;
 }
 
 h2 {
@@ -59,8 +59,8 @@ h2 a {
   text-decoration: none;
 }
 
-.blue { color: #185875; }
-.yellow { color: #FFF842; }
+.blue { color: #080808; }
+.yellow { color: #080808; }
 
 .container th h1 {
 	  font-weight: bold;
@@ -78,6 +78,7 @@ h2 a {
 }
 
 .container {
+  margin-top: 150px;
 	  text-align: left;
 	  overflow: hidden;
 	  width: 80%;
@@ -129,6 +130,13 @@ h2 a {
   transition-timing-function: line;
 }
 
+#block_1 {
+  margin-top: 50px;
+}
+
+#table_block {
+  margin-top: 40px;
+}
 @media (max-width: 800px) {
 .container td:nth-child(4),
 .container th:nth-child(4) { display: none; }
@@ -142,9 +150,11 @@ h2 a {
         <div id="includedContent"></div>
 
 
+        <div id="block_1">
         <h1><span class="blue"></span>Your<span class="blue"></span> <span class="yellow">Orders</pan></h1>
+        </div>
           
-          
+        <div id="table_block">
           <table class="container">
             <thead>
               <tr>
@@ -173,7 +183,7 @@ h2 a {
             </tbody>
           </table>
      
-    
+        </div>
     
     <html> 
     
