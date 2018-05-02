@@ -104,8 +104,11 @@ func (dao *ProductDAO) GetUserOrders(userID int) ([]model.UserOrder, error) {
 	}
 	for _, value := range orders {
 		if product, err := dao.Get(value.ProductID); err == nil {
-
+			value.ProductName = product.Name
+			value.ProductDescription = product.Description
+			value.Price = product.Price * float64(value.Ammount)
 		} else {
+			log.Println("Problem occured")
 			return nil, err
 		}
 	}

@@ -9,4 +9,5 @@ type UserOrder struct {
 	Ammount            int
 	Date               time.Time
 	Price              float64
+	TotalPrice         float64
 }
