@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"html/template"
+	"log"
 	"model"
 	"net/http"
 	"resources"
@@ -17,6 +18,7 @@ var app App
 var templates *resources.Templates
 
 func Init() {
+	log.Println("APP STARTED")
 	app.Router = mux.NewRouter()
 	app.setRouters()
 	app.setTemplates()
@@ -151,3 +153,5 @@ func (app *App) setMainRoutes() {
 	}).Methods("GET")
 
 }
+
+//TODO: need to add profile editing && customize views
