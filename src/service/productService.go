@@ -25,7 +25,6 @@ type productDAO interface {
 	CreateOrder(order model.Order, productID int) (model.Order, error)
 	GetUserOrders(userID int) ([]model.UserOrder, error)
 }
-
 type ProductService struct {
 	DAO productDAO
 }

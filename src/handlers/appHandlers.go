@@ -23,6 +23,7 @@ func Init() {
 	app.setRouters()
 	app.setTemplates()
 	http.ListenAndServe(":8080", app.Router)
+	log.Println("EXITING")
 }
 
 func (app *App) setRouters() {
